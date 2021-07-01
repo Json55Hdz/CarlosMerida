@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js"></script>
+    <script src="https://unpkg.com/aframe-extras@3.3.0/dist/aframe-extras.min.js"></script>
+    <script src="https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
+    
+    <script type="module" src="Sources/Js/Materials_Replace.js"></script>
+    <script  src="Sources/Js/aframe-mirror.js"></script>
+    <script  src="Sources/Js/GroundSceneReflector.js"></script>
+
+    <script src="Sources/Js/TestcameraAnin.js"></script>
+  </head>
+  <body>
+    <a-scene cursor="rayOrigin: mouse" fog="type: exponential; color: #AAA; density: 0.00030;">
+      <a-assets>
+        <a-asset-item id="nviroment" src="/Sources/Models/01.gltf"></a-asset-item>
+        <a-assets-item id="SkyObj" src="/Sources/Models/Sky.obj">
+
+        <img id="sky" src="Sources/Textures/Sky.png">
+      </a-assets>
+      <a-entity  obj-model="obj: #SkyObj;" id="skybox" material="shader: flat; src:#sky; color:#fff" position="0 300 0"  rotation="0 0 0"
+      sound="src: #ambientsound;" scale="0.3 0.3 0.3"></a-entity>
+        <a-entity pivotcam id="campivot" position="0 115.0 0" rotation="0 0 0">
+            <a-entity id="camera" camera="active:  true; fov: 30; near:5.0;" position="0 150 1000" rotation= "-20 0 0" >
+            </a-entity>
+        </a-entity>
+        <a-entity modify-materials gltf-model="#nviroment"></a-entity>
+      <a-entity id="floor" geometry="primitive:  plane;  height:  5000;  width:  5000"
+                rotation="-90 0 0" position="0 0 0" scale= "1 1 1"
+                aframe-mirror="wrapTwo:2.5 2.5;textureOne:Sources/Textures/FloorReplace.png;
+                                textureTwo:Sources/Textures/normalreplace.png;
+                                color:#555555;intensity:0.15;textureWidth:512;textureHeight:512;" ></a-entity>
+    </a-scene>
+  </body>
+</html>

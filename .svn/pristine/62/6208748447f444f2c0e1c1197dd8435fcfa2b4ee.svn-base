@@ -1,0 +1,39 @@
+let cubo;
+let tlCameraRot = gsap.timeline({repeat:-1});
+let cameraPos = document.querySelector('#camera');
+let cameraPivot = document.querySelector('#campivot');
+let boolISetted = false;
+AFRAME.registerComponent('pivotcam', {
+    init: function () {
+        this.aboutTotem = document.querySelector('#campivot');
+      let yPos = 3.1416*2; 
+      tlCameraRot.to(this.aboutTotem.object3D.rotation,   {y: yPos,duration:20, ease: "linear"},0);
+    }
+})
+
+AFRAME.registerComponent('cubito', {
+    init: function () {
+        document.querySelector('#cubitosergios').addEventListener('click', function (evt) {
+            console.log('CLICKKKKK');
+            cameraPos = document.querySelector('#camera');
+            cameraPivot = document.querySelector('#campivot');
+            tlCameraRot.paused(true);
+            if (!boolISetted){
+                boolISetted = true;
+                var tl = gsap.timeline({repeat:0});
+                tl.to(cameraPos.object3D.position,{x:250.672, y:-100, z:-20.711,duration:5, ease: Power2.easeInOut},0);
+                tl.to(cameraPos.object3D.rotation,{x:0, y:-0.3, z:0, duration:5,ease: Power2.easeInOut},0);
+                tl.to(cameraPivot.object3D.rotation,{x:0, y:0.5, z:0, duration:5,ease: Power2.easeInOut},0);
+            }else{
+                console.log("ya esta seteado");
+                boolISetted=false;
+                var tl = gsap.timeline({repeat:0});
+                tl.to(cameraPos.object3D.position,{x:0, y:150, z:1000,duration:5, ease: Power2.easeInOut},0);
+                tl.to(cameraPos.object3D.rotation,{x:-0.349066, y:0, z:0, duration:5,ease: Power2.easeInOut},0);
+                tl.to(cameraPivot.object3D.rotation,{x:0, y:0, z:0, duration:5,ease: Power2.easeInOut},0);
+                tlCameraRot.paused(false);
+            }
+           
+          });
+    }
+});

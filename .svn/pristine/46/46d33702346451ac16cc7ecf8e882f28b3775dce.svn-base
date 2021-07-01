@@ -1,0 +1,26 @@
+let cubo;
+let tlCameraRot = gsap.timeline({repeat:-1});
+let cameraPos = document.querySelector('#camera');
+let cameraPivot = document.querySelector('#campivot');
+AFRAME.registerComponent('pivotcam', {
+    init: function () {
+        this.aboutTotem = document.querySelector('#campivot');
+      let yPos = 3.1416*2; 
+      tlCameraRot.to(this.aboutTotem.object3D.rotation,   {y: yPos,duration:20, ease: "linear"},0);
+    }
+})
+
+/*AFRAME.registerComponent('cubitosergios', {
+    init: function () {
+        document.querySelector('#cubito').addEventListener('click', function (evt) {
+            console.log('CLICKKKKK');
+            cameraPos = document.querySelector('#camera');
+            cameraPivot = document.querySelector('#campivot');
+            tlCameraRot.paused(true);
+            var tl = gsap.timeline({repeat:0});
+            tl.to(cameraPos.object3D.position,{x:1.103, y:1.052, z:0.584,duration:5, ease: Power2.easeInOut},0);
+            tl.to(cameraPos.object3D.rotation,{x:0, y:1, z:0, duration:5,ease: Power2.easeInOut},0);
+            tl.to(cameraPivot.object3D.rotation,{x:0, y:0.5, z:0, duration:5,ease: Power2.easeInOut},0);
+          });
+    }
+});*/

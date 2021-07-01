@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js"></script>
+    <script src="https://unpkg.com/aframe-extras@3.3.0/dist/aframe-extras.min.js"></script>
+    <script src="https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
+    <script src="https://wizgrav.github.io/aframe-effects/dist/aframe-effects.js"></script>
+
+    <script type="module" src="Sources/Js/Materials_Replace.js"></script>
+    <script  src="Sources/Js/aframe-mirror.js"></script>
+    <script  src="Sources/Js/GroundSceneReflector.js"></script>
+
+    <script src="Sources/Js/TestcameraAnin.js"></script>
+  </head>
+  <body>
+    <a-scene stats cursor="rayOrigin: mouse" fog="type: exponential; color: #555; density: 0.00025;" >
+      <!--aqui cargamos los assets-->
+      <a-assets>
+        <!--aqui cargamos la textura de los edificios-->
+        <img id="TexBuildings" src="Sources/Textures/BuildingsBake.jpg">
+        <!--aqui cargamos la textura del cielo-->
+        <img id="sky" src="Sources/Textures/SkyBox.jpg">
+        <!--modelos de la ciudad-->
+        <a-asset-item id="nviroment" src="/Sources/Models/Cuadra_01.obj"></a-asset-item>
+        <a-asset-item id="nviroment1" src="/Sources/Models/Cuadra_02.obj"></a-asset-item>
+        <a-asset-item id="nviroment2" src="/Sources/Models/Cuadra_03.obj"></a-asset-item>
+        <a-asset-item id="nviroment3" src="/Sources/Models/Cuadra_04.obj"></a-asset-item>
+        <!--modelos de los edificios-->
+        <a-asset-item id="building" src="/Sources/Models/Main_01.obj"></a-asset-item>
+        <a-asset-item id="building1" src="/Sources/Models/Main_02.obj"></a-asset-item>
+        <a-asset-item id="building2" src="/Sources/Models/Main_03.obj"></a-asset-item>
+        <a-asset-item id="building3" src="/Sources/Models/Main_04.obj"></a-asset-item>
+        <!--modelos de los murales-->
+        <a-asset-item id="Murals" src="/Sources/Models/Mural_1.obj"></a-asset-item>
+        <!--modelo del cielo-->
+        <a-assets-item id="SkyObj" src="/Sources/Models/Sky.obj">
+        <!--Texturas del reflection Probe-->
+        <a-cubemap id="skyBoxEnv"> <img src="/Sources/Textures/px.png"> <img src="/Sources/Textures/nx.png"> <img src="/Sources/Textures/py.png"> <img src="/Sources/Textures/ny.png"> <img src="/Sources/Textures/pz.png"> <img src="/Sources/Textures/nz.png"> </a-cubemap>
+      </a-assets>
+    <!--Inicio de Instanciacion de elementos y entidades-->
+      <!--Luces-->
+      <a-entity light="type: ambient; intensity:1.15; color: #fff"></a-entity>
+      <!--Cielo-->
+      <a-entity  obj-model="obj: #SkyObj;" id="skybox" material="shader: flat; src:#sky; color:#fff" position="0 -100 0"  rotation="0 0 0"
+      sound="src: #ambientsound;" scale="0.30 0.30 0.30"></a-entity>
+        <!--Camaras-->
+        <a-entity pivotcam id="campivot" position="0 115.0 0" rotation="0 0 0">
+            <a-entity id="camera" camera="active:  true; fov: 30; near:5.0;" position="0 150 1000" rotation= "-20 0 0" >
+            </a-entity>
+        </a-entity>
+        <!--Instancias de la ciudad-->
+        <a-entity class="nviroment" material="src: #TexBuildings; shader: flat; " obj-model="obj: #nviroment;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity class="nviroment" material="src: #TexBuildings; shader: flat;" obj-model="obj: #nviroment1;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity class="nviroment" material="src: #TexBuildings; shader: flat;" obj-model="obj: #nviroment2;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity class="nviroment" material="src: #TexBuildings; shader: flat; " obj-model="obj: #nviroment3;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <!--Instancias de los edificios-->
+        <a-entity class="building" material="src: #TexBuildings; roughness: 0.03; metalness: 0.15; envMap: #skyBoxEnv;" obj-model="obj: #building;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity class="building" material="src: #TexBuildings; roughness: 0.03; metalness: 0.15; envMap: #skyBoxEnv;" obj-model="obj: #building1;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity class="building" material="src: #TexBuildings; roughness: 0.03; metalness: 0.15; envMap: #skyBoxEnv;" obj-model="obj: #building2;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity class="building" material="src: #TexBuildings; roughness: 0.03; metalness: 0.15; envMap: #skyBoxEnv;" obj-model="obj: #building3;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <!--Instancias de los murales-->
+        <a-entity class="building" material="src: #TexBuildings; roughness: 0.03; metalness: 0.4; envMap: #skyBoxEnv;" obj-model="obj: #Murals;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <!--Piso reflectivo mural de afuera-->
+        <a-entity id="floor" geometry="primitive:  plane;  height:  40;  width:  150"
+                rotation="-90 0 0" position="96.962 1.325 122.000" scale= "1 1 1"
+                aframe-mirror="wrapTwo:1 1;textureOne:Sources/Textures/White.jpg;
+                                textureTwo:Sources/Textures/normalreplace.png;
+                                color:#555;intensity:0.8;textureWidth:512;textureHeight:136;" ></a-entity>
+        <!--Piso-->
+        <a-entity id="floor" geometry="primitive:  plane;  height:  4000;  width:  4000"
+                rotation="-90 0 0" position="0 0 0" scale= "1 1 1"
+                aframe-mirror="wrapTwo:1 1;textureOne:Sources/Textures/FloorReplace.jpg;
+                                textureTwo:Sources/Textures/normalreplace.png;
+                                color:#999;intensity:0.3;textureWidth:1024;textureHeight:1024;" ></a-entity>
+        <!--Triggers-->
+        <a-entity visible="false" cubito id="cubitosergios" geometry="primitive: box; width: 1; height: 1; depth: 1" position="314.880 63.310 88.943" scale="215.224 116.813 199.332"></a-entity>
+    </a-scene>
+  </body>
+</html>
