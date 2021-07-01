@@ -16,7 +16,7 @@ AFRAME.registerComponent('cubito', {
         document.querySelector('#cubitosergios').addEventListener('click', function (evt) {
             if (!boolISetted){
                 tlCameraRot.paused(true);
-                MoveCamera(-70,-80.000,302.000,0,-0.8,0,5,0,0.5,0,true);
+                MoveCamera(-70,-40.000,302.000,-0.3,-0.6,0,5,0,0.5,0,true);
             }else{
                 console.log("ya esta seteado");
                 MoveCamera(0,150,1000,-0.349066,0,0,5,0,0,0,false);
