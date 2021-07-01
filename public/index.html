@@ -40,7 +40,7 @@
       </a-assets>
     <!--Inicio de Instanciacion de elementos y entidades-->
       <!--Luces-->
-      <a-entity light="type: ambient; intensity:1.15; color: #ffcccc"></a-entity>
+      <a-entity light="type: ambient; intensity:1.15; color: #fff"></a-entity>
       <!--Cielo-->
       <a-entity  obj-model="obj: #SkyObj;" id="skybox" material="shader: flat; src:#sky; color:#fff" position="0 -100 0"  rotation="0 0 0"
       sound="src: #ambientsound;" scale="0.30 0.30 0.30"></a-entity>
@@ -62,19 +62,19 @@
         <!--Instancias de los murales-->
         <a-entity class="building" material="src: #TexBuildings; roughness: 0.03; metalness: 0.4; envMap: #skyBoxEnv;" obj-model="obj: #Murals;" position="0 0 0"  rotation="0 0 0"></a-entity>
         <!--Piso reflectivo mural de afuera-->
-        <a-entity id="floor" geometry="primitive:  plane;  height:  40;  width:  150"
+        <a-entity id="ReflectionToten1" geometry="primitive:  plane;  height:  40;  width:  150"
                 rotation="-90 0 0" position="96.962 1.325 122.000" scale= "1 1 1"
                 aframe-mirror="wrapTwo:1 1;textureOne:Sources/Textures/White.jpg;
                                 textureTwo:Sources/Textures/normalreplace.png;
-                                color:#555;intensity:0.8;textureWidth:512;textureHeight:136;" ></a-entity>
+                                color:#555;intensity:0.8;textureWidth:1024;textureHeight:1024;" ></a-entity>
         <!--Piso-->
-        <a-entity id="floor" geometry="primitive:  plane;  height:  4000;  width:  4000"
+        <a-entity id="floorReflective" geometry="primitive:  plane;  height:  4000;  width:  4000"
                 rotation="-90 0 0" position="0 0 0" scale= "1 1 1"
                 aframe-mirror="wrapTwo:1 1;textureOne:Sources/Textures/FloorReplace.jpg;
                                 textureTwo:Sources/Textures/normalreplace.png;
-                                color:#999;intensity:0.3;textureWidth:1024;textureHeight:1024;" ></a-entity>
+                                color:#999;intensity:0.2;textureWidth:1024;textureHeight:1024;" ></a-entity>
         <!--Triggers-->
-        <a-entity visible="false" cubito id="cubitosergios" geometry="primitive: box; width: 1; height: 1; depth: 1" position="314.880 63.310 88.943" scale="215.224 116.813 199.332"></a-entity>
+        <a-entity visible="false" cubito id="cubitosergios" geometry="primitive: box; width: 1; height: 1; depth: 1" position="126.686 63.310 168.065" scale="215.224 116.813 199.332"></a-entity>
     </a-scene>
   </body>
 </html>
