@@ -32,7 +32,9 @@
         <a-asset-item id="building2" src="/Sources/Models/Main_03.obj"></a-asset-item>
         <a-asset-item id="building3" src="/Sources/Models/Main_04.obj"></a-asset-item>
         <!--modelos de los murales-->
-        <a-asset-item id="Murals" src="/Sources/Models/Mural_1.obj"></a-asset-item>
+        <a-asset-item id="Murals3" src="/Sources/Models/Mural_1.obj"></a-asset-item>
+        <a-asset-item id="Murals" src="/Sources/Models/Mural_2Env.obj"></a-asset-item>
+        <a-asset-item id="Murals2" src="/Sources/Models/Mural_2.obj"></a-asset-item>
         <!--Modelos, posiciones de las camaras-->
         <a-asset-item id="CameraPos" src="/Sources/Models/Camera_Pos_01.obj"></a-asset-item>
         <a-asset-item id="CameraPos1" src="/Sources/Models/Camera_Pos_02.obj"></a-asset-item>
@@ -42,6 +44,9 @@
         <a-assets-item id="SkyObj" src="/Sources/Models/Sky.obj">
         <!--modelo de las montañas-->
         <a-assets-item id="Mountains" src="/Sources/Models/MountainDummie.obj">
+          <!--Texturas de los murales-->
+          <img id="MuralTex" src="Sources/Textures/Mural_2.png">
+          <img id="MuralEnvTex" src="Sources/Textures/Mural_2_Env.png">
         <!--Texturas del reflection Probe-->
         <a-cubemap id="skyBoxEnv"> <img src="/Sources/Textures/px.png"> <img src="/Sources/Textures/nx.png"> <img src="/Sources/Textures/py.png"> <img src="/Sources/Textures/ny.png"> <img src="/Sources/Textures/pz.png"> <img src="/Sources/Textures/nz.png"> </a-cubemap>
       </a-assets>
@@ -81,7 +86,10 @@
         <a-entity class="PositionCameraMural3"  geometry="primitive:box;" position="158.716 48.994 -194.739"  rotation="0 -44.441 0" scale="1 1 1"></a-entity>
 
         <!--Instancias de los murales-->
-        <a-entity class="building" material="src: #TexBuildings; roughness: 0.03; metalness: 0.4; envMap: #skyBoxEnv;" obj-model="obj: #Murals;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity class="building" material="src: #TexBuildings; roughness: 0.03; metalness: 0.4; envMap: #skyBoxEnv;" obj-model="obj: #Murals3;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity class="building" material="shader:flat; src:#MuralTex" obj-model="obj: #Murals2;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity class="building" material="shader:flat; src:#MuralEnvTex" obj-model="obj: #Murals;" position="0 0 0"  rotation="0 0 0"></a-entity>
+
         <!--Piso reflectivo mural de afuera-->
         <a-entity id="ReflectionToten1" geometry="primitive:  plane;  height:  40;  width:  150"
                 rotation="-90 0 0" position="96.962 1.325 122.000" scale= "1 1 1"
