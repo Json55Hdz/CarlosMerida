@@ -10,15 +10,15 @@
     <script type="module" src="Sources/Js/Materials_Replace.js"></script>
     <script  src="Sources/Js/aframe-mirror.js"></script>
     <script  src="Sources/Js/GroundSceneReflector.js"></script>
-
     <script src="Sources/Js/TestcameraAnin.js"></script>
   </head>
   <body>
-    <a-scene stats cursor="rayOrigin: mouse" fog="type: exponential; color: #555; density: 0.00025;" >
+    <a-scene stats cursor="rayOrigin: mouse" fog="type: exponential; color: #aaa; density: 0.00060;" >
       <!--aqui cargamos los assets-->
       <a-assets>
         <!--aqui cargamos la textura de los edificios-->
         <img id="TexBuildings" src="Sources/Textures/BuildingsBake.jpg">
+        <img id="TexBuildingsEnv" src="Sources/Textures/BuildingsBakeEnv.jpg">
         <!--aqui cargamos la textura del cielo-->
         <img id="sky" src="Sources/Textures/SkyBox.jpg">
         <!--modelos de la ciudad-->
@@ -33,32 +33,53 @@
         <a-asset-item id="building3" src="/Sources/Models/Main_04.obj"></a-asset-item>
         <!--modelos de los murales-->
         <a-asset-item id="Murals" src="/Sources/Models/Mural_1.obj"></a-asset-item>
+        <!--Modelos, posiciones de las camaras-->
+        <a-asset-item id="CameraPos" src="/Sources/Models/Camera_Pos_01.obj"></a-asset-item>
+        <a-asset-item id="CameraPos1" src="/Sources/Models/Camera_Pos_02.obj"></a-asset-item>
+        <a-asset-item id="CameraPos2" src="/Sources/Models/Camera_Pos_03.obj"></a-asset-item>
+        <a-asset-item id="CameraPos3" src="/Sources/Models/Camera_Pos_04.obj"></a-asset-item>
         <!--modelo del cielo-->
         <a-assets-item id="SkyObj" src="/Sources/Models/Sky.obj">
+        <!--modelo de las montañas-->
+        <a-assets-item id="Mountains" src="/Sources/Models/MountainDummie.obj">
         <!--Texturas del reflection Probe-->
         <a-cubemap id="skyBoxEnv"> <img src="/Sources/Textures/px.png"> <img src="/Sources/Textures/nx.png"> <img src="/Sources/Textures/py.png"> <img src="/Sources/Textures/ny.png"> <img src="/Sources/Textures/pz.png"> <img src="/Sources/Textures/nz.png"> </a-cubemap>
       </a-assets>
     <!--Inicio de Instanciacion de elementos y entidades-->
       <!--Luces-->
-      <a-entity light="type: ambient; intensity:1.15; color: #fff"></a-entity>
+      <a-entity light="type: ambient; intensity:1; color: #fff"></a-entity>
       <!--Cielo-->
       <a-entity  obj-model="obj: #SkyObj;" id="skybox" material="shader: flat; src:#sky; color:#fff" position="0 -100 0"  rotation="0 0 0"
       sound="src: #ambientsound;" scale="0.30 0.30 0.30"></a-entity>
         <!--Camaras-->
         <a-entity pivotcam id="campivot" position="0 115.0 0" rotation="0 0 0">
-            <a-entity id="camera" camera="active:  true; fov: 30; near:5.0;" position="0 150 1000" rotation= "-20 0 0" >
+            <a-entity id="camera" camera="active:  true; fov: 30; near:5.0;" position="-3939.240 677.858 3802.399" rotation= "-10 -45 0" ><!--Posiciones iniciales 0 150 1000-->
             </a-entity>
         </a-entity>
         <!--Instancias de la ciudad-->
-        <a-entity class="nviroment" material="src: #TexBuildings; shader: flat; " obj-model="obj: #nviroment;" position="0 0 0"  rotation="0 0 0"></a-entity>
-        <a-entity class="nviroment" material="src: #TexBuildings; shader: flat;" obj-model="obj: #nviroment1;" position="0 0 0"  rotation="0 0 0"></a-entity>
-        <a-entity class="nviroment" material="src: #TexBuildings; shader: flat;" obj-model="obj: #nviroment2;" position="0 0 0"  rotation="0 0 0"></a-entity>
-        <a-entity class="nviroment" material="src: #TexBuildings; shader: flat; " obj-model="obj: #nviroment3;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity class="nviroment" material="src: #TexBuildingsEnv;" obj-model="obj: #nviroment;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity class="nviroment" material="src: #TexBuildingsEnv;" obj-model="obj: #nviroment1;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity class="nviroment" material="src: #TexBuildingsEnv;" obj-model="obj: #nviroment2;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity class="nviroment" material="src: #TexBuildingsEnv;" obj-model="obj: #nviroment3;" position="0 0 0"  rotation="0 0 0"></a-entity>
         <!--Instancias de los edificios-->
         <a-entity class="building" material="src: #TexBuildings; roughness: 0.03; metalness: 0.15; envMap: #skyBoxEnv;" obj-model="obj: #building;" position="0 0 0"  rotation="0 0 0"></a-entity>
         <a-entity class="building" material="src: #TexBuildings; roughness: 0.03; metalness: 0.15; envMap: #skyBoxEnv;" obj-model="obj: #building1;" position="0 0 0"  rotation="0 0 0"></a-entity>
         <a-entity class="building" material="src: #TexBuildings; roughness: 0.03; metalness: 0.15; envMap: #skyBoxEnv;" obj-model="obj: #building2;" position="0 0 0"  rotation="0 0 0"></a-entity>
         <a-entity class="building" material="src: #TexBuildings; roughness: 0.03; metalness: 0.15; envMap: #skyBoxEnv;" obj-model="obj: #building3;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <!--Instancias de las montañas-->
+        <a-entity class="mountain" obj-model="obj: #Mountains;" position="0 0 0"  rotation="0 0 0"></a-entity>
+
+        <!--Instancias posiciones de la camara-->
+        <a-entity class="CameraPos" obj-model="obj: #CameraPos;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity class="CameraPos" obj-model="obj: #CameraPos1;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity class="CameraPos" obj-model="obj: #CameraPos2;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity class="CameraPos" obj-model="obj: #CameraPos3;" position="0 0 0"  rotation="0 0 0"></a-entity>
+
+        <a-entity class="PositionCameraMural0"  geometry="primitive:box;" position="38.124 9.726 220.679"  rotation="0 54.013 0" scale="1 1 1"></a-entity>
+        <a-entity class="PositionCameraMural1"  geometry="primitive:box;" position="40.988 6.069 -208.836"  rotation="0 -45.852 0" scale="1 1 1"></a-entity>
+        <a-entity class="PositionCameraMural2"  geometry="primitive:box;" position="-136.166 42.778 220.739"  rotation="0 -29.651 0" scale="1 1 1"></a-entity>
+        <a-entity class="PositionCameraMural3"  geometry="primitive:box;" position="158.716 48.994 -194.739"  rotation="0 -44.441 0" scale="1 1 1"></a-entity>
+
         <!--Instancias de los murales-->
         <a-entity class="building" material="src: #TexBuildings; roughness: 0.03; metalness: 0.4; envMap: #skyBoxEnv;" obj-model="obj: #Murals;" position="0 0 0"  rotation="0 0 0"></a-entity>
         <!--Piso reflectivo mural de afuera-->
