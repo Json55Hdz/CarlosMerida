@@ -1,15 +1,9 @@
+  let cameraPos;
+  
   AFRAME.registerComponent('modify-materials', {
 	
     init: function () {
     const data = this.data;
-    this.texture = new THREE.CubeTextureLoader().load([
-            "Sources/Textures/px.png", "Sources/Textures/nx.png",
-            "Sources/Textures/py.png", "Sources/Textures/ny.png",
-            "Sources/Textures/pz.png", "Sources/Textures/nz.png"
-        ]);
-    this.texture.format = THREE['RGBFormat'];
-
-    const SceneEnvMap = this.texture;
     
 //    this.texture = new THREE.TextureLoader().load("./Textures/White.jpg");//
 
@@ -25,12 +19,16 @@
 
 //		    node.geometry.attributes.uv2 = node.geometry.attributes.uv.clone();//
 	      }//
-          if (node.material && 'envMap' in node.material) {
+          if (node.material && 'charPosition' in node.material) {
           
-            node.material.envMap = SceneEnvMap;
+            node.material.charPosition = cameraPos;
 //            node.material.lightMap = lightMap;
           }
         });
       });
+    },
+    tick: function () {
+      cameraPos = this.Camera.object3D.position;
+		console.log(cameraPos);
     }
   });
