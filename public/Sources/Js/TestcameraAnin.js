@@ -3,18 +3,27 @@ let tlCameraRot = gsap.timeline({repeat:-1});
 let cameraPos = document.querySelector('#camera');
 let cameraPivot = document.querySelector('#campivot');
 let boolISetted = false;
-AFRAME.registerComponent('pivotcam', {
+let Camera;
+
+
+function InitCamera () {
+    this.Camera = document.querySelector('#camera');
+    var tl = gsap.timeline({repeat:0});
+    tl.to(this.Camera.object3D.position,   {x:0, y:150, z:1000,duration:5, ease: Power2.easeInOut},0);
+    tl.to(this.Camera.object3D.rotation,   {x:-0.401426, y:0, z:0,duration:3.5, ease: Power2.easeInOut},2);
+    tl.eventCallback("onComplete", function() {
+      StartCameraRot ();
+    });
+}
+
+AFRAME.registerComponent('floorreflectives', {
     init: function () {
+        this.el.addEventListener('model-loaded', () => {
+            CheckElementsLoaded();
+        });
         this.Camera = document.querySelector('#camera');
-          var tl = gsap.timeline({repeat:0});
-          tl.to(this.Camera.object3D.position,   {x:0, y:150, z:1000,duration:5, ease: Power2.easeInOut},0);
-          tl.to(this.Camera.object3D.rotation,   {x:-0.349066, y:0, z:0,duration:3.5, ease: Power2.easeInOut},2);
-          tl.eventCallback("onComplete", function() {
-              console.log("termineee");
-            StartCameraRot ();
-          });
     }
-})
+ });
 
 function StartCameraRot ()  
 {
@@ -26,10 +35,12 @@ function StartCameraRot ()
 
 AFRAME.registerComponent('cubito', {
     init: function () {
+        var cameraPosMural = document.querySelector('#mural1');
         document.querySelector('#cubitosergios').addEventListener('click', function (evt) {
             if (!boolISetted){
                 tlCameraRot.paused(true);
-                MoveCamera(-70,-40.000,302.000,-0.3,-0.6,0,5,0,0.5,0,true);
+                MoveCamera(cameraPosMural.object3D.position.x+30,cameraPosMural.object3D.position.y-170,cameraPosMural.object3D.position.z+30,-0.1,-0.5,0,5,0,0.5,0,true);
+                document.querySelector('#build').setAttribute('material', {cutOut: 1});
             }else{
                 console.log("ya esta seteado");
                 MoveCamera(0,150,1000,-0.349066,0,0,5,0,0,0,false);

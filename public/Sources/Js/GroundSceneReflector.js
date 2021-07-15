@@ -21,6 +21,9 @@ Ashok.GroundSceneReflector = function(meshobject, renderer, scene, data)
     this.data.wrapOne = (this.data.wrapOne)? this.data.wrapOne : {x:1, y: 1};
     this.data.wrapTwo = (this.data.wrapTwo)? this.data.wrapTwo : {x:1, y: 1};
     this.data.color = (this.data.color)? this.data.color : '#848485';
+    this.data.fogColor = (this.data.fogColor)? this.data.fogColor : '#AAAAAA';
+    this.data.charPos = (this.data.charPos)? this.data.charPos : {x: 0, y: 0, z: 0};
+
 
 
     var reflectorPlane = new THREE.Plane();
@@ -73,7 +76,8 @@ Ashok.GroundSceneReflector = function(meshobject, renderer, scene, data)
 		material.uniforms.color.value = new THREE.Color(this.data.color);
 		material.uniforms.invertedUV.value = this.data.invertedUV;
 		material.uniforms.textureMatrix.value = textureMatrix;
-
+		material.uniforms.fogColor.value = new THREE.Color(this.data.fogColor);
+		material.uniforms.charPos.value = this.data.charPos;
 		if(this.data.textureOne)
 		{
 			console.log('LOAD TEXTURE ONE ');
@@ -235,6 +239,16 @@ Ashok.GroundSceneReflector.ReflectorShader =
 	THREE.UniformsLib[ "ambient" ],
 	THREE.UniformsLib['lights'],
     THREE.UniformsLib[ "fog" ],{
+    	'charPos' :
+    	{
+    		type : 'v3',
+    		value: null
+    	},
+    	'fogColor':
+    	{
+    		type: 'c',
+    		value: null
+    	},
 		'color': 
 		{
 			type: 'c',
@@ -321,13 +335,15 @@ Ashok.GroundSceneReflector.ReflectorShader =
       'varying vec2 vUv;',
       'varying vec4 vUv2;',
 	  'varying vec3 vNormal;',
+	  'varying vec3 vPosition;',
 
       'void main()', 
       '{',
         'vUv = uv;',
         'vUv2 = textureMatrix * vec4( position, 1.0 );',    
 		'vNormal = vec3(modelMatrix * vec4(-normal.x, normal.y, -normal.z ,0.0));',
-        'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
+		'vPosition = position ;',
+        'gl_Position = projectionMatrix * modelViewMatrix * vec4( position , 1.0 );',
       '}',
 	].join( '\n' ),
 
@@ -356,8 +372,11 @@ Ashok.GroundSceneReflector.ReflectorShader =
       '//The color of the material incase of two textures arent available',
       'uniform vec3 color;',
       '//vUv2 and vUv is coming from uv coordinates and texture matrix projection',
+      'uniform vec3 charPos;',
+      'uniform vec3 fogColor;',
       'varying vec2 vUv;',
       'varying vec4 vUv2;',
+      'varying vec3 vPosition;',
 //      THREE.ShaderChunk[ "common" ],
 //     THREE.ShaderChunk[ "fog_pars_fragment" ],
 
@@ -376,8 +395,13 @@ Ashok.GroundSceneReflector.ReflectorShader =
             'vec4 reflection = texture2DProj( tDiffuse, vUv2 + Cb_Uv, 3.0 );',
             'vec4 Ca;',
 			'float op;',
+			//distance from UV
+			//'float fogdistvUv = sqrt(pow((vUv.x - float(0.5)),2.0)+pow((vUv.x - float(0.5)),2.0));',
 			'vec3 colorAd = color.rgb +  reflBacked ;',
-            
+
+			//distance from position
+            'float fogDist = sqrt(pow((vPosition.x - charPos.x), 2.0)+pow((vPosition.y - charPos.y), 2.0)+pow((vPosition.z - charPos.z), 2.0));',
+
             'if(!tOneFlag)',
             '{',
                 'c = (reflection.rgb * (reflection.a * intensity)) + colorAd.rgb;',
@@ -391,10 +415,12 @@ Ashok.GroundSceneReflector.ReflectorShader =
                 'c = (reflection.rgb * (reflection.a * intensity)) + (tcolors.rgb * colorAd.rgb );',
             '}',
 
+            'vec3 cf = mix(c , fogColor , clamp(float(fogDist*0.00060), 0.0 , 1.0));',
+
 			'if (op < 0.5)',
 			'	discard;',
 
-            'gl_FragColor = vec4(c , op);',
+            'gl_FragColor = vec4(cf , op);',
 
 //            THREE.ShaderChunk[ "fog_fragment" ],
       '}',
