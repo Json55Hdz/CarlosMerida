@@ -40,7 +40,7 @@ AFRAME.registerComponent('cubito', {
             if (!boolISetted){
                 tlCameraRot.paused(true);
                 MoveCamera(cameraPosMural.object3D.position.x+30,cameraPosMural.object3D.position.y-170,cameraPosMural.object3D.position.z+30,-0.1,-0.5,0,5,0,0.5,0,true);
-                document.querySelector('#build').setAttribute('material', {cutOut: 1});
+                AnimateBuildOne (1);
             }else{
                 console.log("ya esta seteado");
                 MoveCamera(0,150,1000,-0.349066,0,0,5,0,0,0,false);
@@ -49,10 +49,40 @@ AFRAME.registerComponent('cubito', {
                     tlCameraRot.paused(false);
                     tlCameraRot.restart();
                 }, 5000);
+                AnimateBuildOne (0);
             }
         });
     }
 });
+
+function AnimateBuildOne (objetive) {
+  //  document.querySelector('#build').setAttribute('material', {cutOut: 1});
+    var tarj = 0;
+    var mat = document.querySelector('#build').getAttribute('material');
+    var timeLineAnim = gsap.timeline({repeat:0});
+    if (objetive == 1) {
+        timeLineAnim.to({}, {
+            duration: 5,
+            onUpdate() {
+              tarj+=(1/5)/60;
+              console.log(tarj);
+              document.querySelector('#build').setAttribute('material', {cutOut: tarj});
+            }
+          });
+    }else{
+        tarj=1;
+        timeLineAnim.to({}, {
+            duration: 5,
+            onUpdate() {
+              tarj-=(1/5)/60;
+              console.log(tarj);
+              document.querySelector('#build').setAttribute('material', {cutOut: tarj});
+            }
+          });
+    }
+   
+}
+
 
 //Esta amdre es el shader que no sirvio de sergios xd
 //AFRAME.registerShader('shFloor', {​​​​​​​
