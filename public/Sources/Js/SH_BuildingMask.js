@@ -38,9 +38,9 @@ fragmentShader: [
 
 		'vec3 colRefl = vec3(col.rgb);',
 		'float fogD = sqrt(pow((vPosition.x - charPosition.x), 2.0)+pow((vPosition.y - charPosition.y), 2.0)+pow((vPosition.z - charPosition.z), 2.0));',
-		'vec3 colFog = mix(colRefl,fogColor, clamp(float(fogD * 0.00060),0.0,1.0));',
+		'float colFog = mix(0.6,0.0, clamp(float(fogD * 0.00015),0.0,1.0));',
 		'float cutTex = (col.a * float(2.0)) - cutOut;',
-		'gl_FragColor = vec4 (colFog , cutTex);',
+		'gl_FragColor = vec4 (colRefl , colFog);',
 
 		'if(cutTex < 0.5) discard;',
 	'}'

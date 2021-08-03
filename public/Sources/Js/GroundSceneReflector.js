@@ -415,7 +415,7 @@ Ashok.GroundSceneReflector.ReflectorShader =
                 'c = (reflection.rgb * (reflection.a * intensity)) + (tcolors.rgb * colorAd.rgb );',
             '}',
 
-            'vec3 cf = mix(c , fogColor , clamp(float(fogDist*0.00060), 0.0 , 1.0));',
+            'vec3 cf = mix(c , fogColor , clamp(float(fogDist*0.00020), 0.0 , 1.0));',
 
 			'if (op < 0.5)',
 			'	discard;',

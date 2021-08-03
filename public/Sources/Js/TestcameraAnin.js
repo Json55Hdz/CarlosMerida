@@ -4,15 +4,31 @@ let cameraPos = document.querySelector('#camera');
 let cameraPivot = document.querySelector('#campivot');
 let boolISetted = false;
 let Camera;
-
+let boolCameraControls = false;
 
 function InitCamera () {
     this.Camera = document.querySelector('#camera');
+    var cloud0 = document.querySelector('#cloud0');
+    var cloud1 = document.querySelector('#cloud1');
+    var cloud2 = document.querySelector('#cloud2');
+    var cloud3 = document.querySelector('#cloud3');
+    var alphaCloud = 0.3;
     var tl = gsap.timeline({repeat:0});
     tl.to(this.Camera.object3D.position,   {x:0, y:150, z:1000,duration:5, ease: Power2.easeInOut},0);
-    tl.to(this.Camera.object3D.rotation,   {x:-0.401426, y:0, z:0,duration:3.5, ease: Power2.easeInOut},2);
+    tl.to(this.Camera.object3D.rotation,   {x:-0.35, y:0, z:0,duration:3.5, ease: Power2.easeInOut},2);
+    tl.to({}, {
+        duration: 3,
+        onUpdate() {
+            alphaCloud+=(1/3)/60;
+            cloud0.setAttribute('material', {Alpha: alphaCloud});
+            cloud1.setAttribute('material', {Alpha: alphaCloud});
+            cloud2.setAttribute('material', {Alpha: alphaCloud});
+            cloud3.setAttribute('material', {Alpha: alphaCloud});
+        }
+      },1);
     tl.eventCallback("onComplete", function() {
-      StartCameraRot ();
+        CameraEndFirtsTravel();
+        StartCameraRot ();
     });
 }
 
@@ -30,20 +46,21 @@ function StartCameraRot ()
     this.aboutTotem = document.querySelector('#campivot');
     let yPos = 3.1416*2; 
     tlCameraRot.restart();
-    tlCameraRot.to(this.aboutTotem.object3D.rotation,   {y: yPos,duration:40, ease: "linear"},0);    
+    tlCameraRot.to(this.aboutTotem.object3D.rotation,   {y: yPos,duration:70, ease: "linear"},0);    
 }
 
-AFRAME.registerComponent('cubito', {
+AFRAME.registerComponent('bank', {
     init: function () {
         var cameraPosMural = document.querySelector('#mural1');
-        document.querySelector('#cubitosergios').addEventListener('click', function (evt) {
+        document.querySelector('#triggerbank').addEventListener('click', function (evt) {
             if (!boolISetted){
+                boolCameraControls = true;
                 tlCameraRot.paused(true);
-                MoveCamera(cameraPosMural.object3D.position.x+30,cameraPosMural.object3D.position.y-170,cameraPosMural.object3D.position.z+30,-0.1,-0.5,0,5,0,0.5,0,true);
+                MoveCamera(cameraPosMural.object3D.position.x+30,cameraPosMural.object3D.position.y-182,cameraPosMural.object3D.position.z-20,-0.05,-1.07,0,5,0,0.5,0,true,3);
                 AnimateBuildOne (1);
             }else{
-                console.log("ya esta seteado");
-                MoveCamera(0,150,1000,-0.349066,0,0,5,0,0,0,false);
+                boolCameraControls = false;
+                MoveCamera(0,150,1000,-0.349066,0,0,5,0,0,0,false,4);
                 setTimeout(() => 
                 { 
                     tlCameraRot.paused(false);
@@ -55,8 +72,72 @@ AFRAME.registerComponent('cubito', {
     }
 });
 
+AFRAME.registerComponent('igss', {
+    init: function () {
+        var cameraPosMural = document.querySelector('#mural0');
+        document.querySelector('#triggerigss').addEventListener('click', function (evt) {
+            if (!boolISetted){
+                boolCameraControls = true;
+                tlCameraRot.paused(true);
+                MoveCamera(cameraPosMural.object3D.position.x-210,cameraPosMural.object3D.position.y-178,cameraPosMural.object3D.position.z+40,-0.07,-1.14,0,5,0,0.5,0,true,0);
+            }else{
+                boolCameraControls = false;
+                MoveCamera(0,150,1000,-0.349066,0,0,5,0,0,0,false,4);
+                setTimeout(() => 
+                { 
+                    tlCameraRot.paused(false);
+                    tlCameraRot.restart();
+                }, 5000);
+            }
+        });
+    }
+});
+
+/*AFRAME.registerComponent('municipalidad', {
+    init: function () {
+        var cameraPosMural = document.querySelector('#mural2');
+        document.querySelector('#triggerMunicipalidad').addEventListener('click', function (evt) {
+            if (!boolISetted){
+                boolCameraControls = true;
+                tlCameraRot.paused(true);
+                MoveCamera(cameraPosMural.object3D.position.x,cameraPosMural.object3D.position.y-150,cameraPosMural.object3D.position.z+150,-0.07,0.3,0,5,0,0.5,0,true,1);
+            }else{
+                boolCameraControls = false;
+                MoveCamera(0,150,1000,-0.349066,0,0,5,0,0,0,false,4);
+                setTimeout(() => 
+                { 
+                    tlCameraRot.paused(false);
+                    tlCameraRot.restart();
+                }, 5000);
+            }
+        });
+    }
+});*/
+
+AFRAME.registerComponent('credito', {
+    init: function () {
+        var cameraPosMural = document.querySelector('#mural3');
+        document.querySelector('#triggercredito').addEventListener('click', function (evt) {
+            if (!boolISetted){
+                boolCameraControls = true;
+                tlCameraRot.paused(true);
+                MoveCamera(cameraPosMural.object3D.position.x+10,cameraPosMural.object3D.position.y-179,cameraPosMural.object3D.position.z+230,-0.07,-0.84,0,5,0,0.5,0,true,2);
+                AnimateBuildTwo(1);
+            }else{
+                boolCameraControls = false;
+                MoveCamera(0,150,1000,-0.349066,0,0,5,0,0,0,false,4);
+                AnimateBuildTwo(0);
+                setTimeout(() => 
+                { 
+                    tlCameraRot.paused(false);
+                    tlCameraRot.restart();
+                }, 5000);
+            }
+        });
+    }
+});
+
 function AnimateBuildOne (objetive) {
-  //  document.querySelector('#build').setAttribute('material', {cutOut: 1});
     var tarj = 0;
     var mat = document.querySelector('#build').getAttribute('material');
     var timeLineAnim = gsap.timeline({repeat:0});
@@ -64,8 +145,10 @@ function AnimateBuildOne (objetive) {
         timeLineAnim.to({}, {
             duration: 5,
             onUpdate() {
-              tarj+=(1/5)/60;
-              console.log(tarj);
+                if (tarj < 1) {
+                    tarj+=(1/5)/60;
+                }
+                console.log(tarj);
               document.querySelector('#build').setAttribute('material', {cutOut: tarj});
             }
           });
@@ -74,7 +157,9 @@ function AnimateBuildOne (objetive) {
         timeLineAnim.to({}, {
             duration: 5,
             onUpdate() {
-              tarj-=(1/5)/60;
+                if (tarj > 0) {
+                    tarj-=(1/5)/60;
+                }
               console.log(tarj);
               document.querySelector('#build').setAttribute('material', {cutOut: tarj});
             }
@@ -83,21 +168,36 @@ function AnimateBuildOne (objetive) {
    
 }
 
+function AnimateBuildTwo (objetive) {
+    var tarj = 0;
+    var mat = document.querySelector('#build1').getAttribute('material');
+    var timeLineAnim = gsap.timeline({repeat:0});
+    if (objetive == 1) {
+        timeLineAnim.to({}, {
+            duration: 5,
+            onUpdate() {
+                if (tarj < 1) {
+                    tarj+=(1/5)/60;
+                }
+              document.querySelector('#build1').setAttribute('material', {cutOut: tarj});
+            }
+          });
+    }else{
+        tarj=1;
+        timeLineAnim.to({}, {
+            duration: 5,
+            onUpdate() {
+                if (tarj > 0) {
+                    tarj-=(1/5)/60;
+                }
+              document.querySelector('#build1').setAttribute('material', {cutOut: tarj});
+            }
+          });
+    }
+   
+}
 
-//Esta amdre es el shader que no sirvio de sergios xd
-//AFRAME.registerShader('shFloor', {​​​​​​​
-//  schema: {​​​​​​​
-//     color : {​​​​​​​type: 'color', is: 'uniform'}​​​​​​​,
-//    bakeTex: {​​​​​​​type: 'map', is: 'uniform'}​​​​​​​
-//}​​​​​​​,
-//vertexShader: "varying vec2 vUv; void main (){​​​​​​​  vUv = uv;  gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );}​​​​​​​",
-
-
-//fragmentShader:"varying vec2 vUv;uniform vec3 color;uniform texture bakeTex; void main() {​​​​​​​  vec2 distanceT = vUv * vec2(2.0, 2.0) -vec2(1.0 , 1.0);    vec2 distApl = distanceT * distanceT /2.0 + 0.5;    float distAplEnv = distApl.r*distApl.g;    vec4 malditaDist = vec4 (distAplEnv ,distAplEnv ,distAplEnv ,distAplEnv );  vec4 colordeTex = texture (bakeTex, vUv);  vec4 finalColor = vec4 (color, 1) * colordeTex * malditaDist ;  gl_FragColor = vec4(abs(sin(u_time)),0.0,0.0,1.0);}​​​​​​​"}
-//​​​​​​​);
-
-
-function MoveCamera (xPos,yPos,zPos,xRot,YRot,ZRot,duration,XPivotRot,yPivotRot,zPivotRot,boolSet){
+function MoveCamera (xPos,yPos,zPos,xRot,YRot,ZRot,duration,XPivotRot,yPivotRot,zPivotRot,boolSet,idBuilding){
     cameraPos = document.querySelector('#camera');
     cameraPivot = document.querySelector('#campivot');
     var tl = gsap.timeline({repeat:0});
@@ -105,4 +205,49 @@ function MoveCamera (xPos,yPos,zPos,xRot,YRot,ZRot,duration,XPivotRot,yPivotRot,
                 tl.to(cameraPos.object3D.rotation,{x:xRot, y:YRot, z:ZRot, duration:duration,ease: Power2.easeInOut},0);
                 tl.to(cameraPivot.object3D.rotation,{x:XPivotRot, y:yPivotRot, z:zPivotRot, duration:duration,ease: Power2.easeInOut},0);
                 boolISetted = boolSet;
+    tl.eventCallback("onComplete", function() {
+                    ManageCameraControls(boolCameraControls);
+                    CallActionById(idBuilding);
+                });
+}
+
+function MoveCameraAndRotate (xPos,yPos,zPos,xRot,YRot,ZRot,duration,XPivotRot,yPivotRot,zPivotRot,boolSet,idBuilding){
+    cameraPos = document.querySelector('#camera');
+    cameraPivot = document.querySelector('#campivot');
+    var tl = gsap.timeline({repeat:0});
+                tl.to(cameraPos.object3D.position,{x:xPos, y:yPos, z:zPos,duration:duration, ease: Power2.easeInOut},0);
+                tl.to(cameraPos.object3D.rotation,{x:xRot, y:YRot, z:ZRot, duration:duration,ease: Power2.easeInOut},0);
+                tl.to(cameraPivot.object3D.rotation,{x:XPivotRot, y:yPivotRot, z:zPivotRot, duration:duration,ease: Power2.easeInOut},0);
+                boolISetted = boolSet;
+                tl.eventCallback("onComplete", function() {
+                    StartCameraRot ();
+                });
+}
+
+function CallActionById (id) {
+    switch (id) {
+        case 0:
+            OnIGSSAnimationEnd();
+            break;
+        case 1:
+            OnMunicipalidadAnimationEnd();
+            break;
+        case 2:
+            OnCreditoHipotecarioAnimationEnd();
+            break;
+        case 3:
+            OnBankAnimationEnd();
+            break;
+        case 4:
+            OnCameraReturnToCivicCenter();
+            break;
+    }
+}
+
+function ManageCameraControls (bool) {
+   // document.querySelector('#camera').setAttribute('look-controls', 'enabled', boolCameraControls);
+   // let controls = document.querySelector('#camera').components['look-controls'];
+   // controls.pitchObject.rotation.y = -0.05;
+   // controls.yawObject.rotation.y = -0.488;
+   // console.log(controls);
 }

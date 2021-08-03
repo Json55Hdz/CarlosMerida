@@ -10,16 +10,21 @@
     <script type="module" src="Sources/Js/Materials_Replace.js"></script>
     <script  src="Sources/Js/aframe-mirror.js"></script>
     <script  src="Sources/Js/GroundSceneReflector.js"></script>
+    <script  src="Sources/Js/SH_Cloud.js"></script>
     <script  src="Sources/Js/SH_BuildingMask.js"></script>
     <script src="Sources/Js/TestcameraAnin.js"></script>
+    <script src="Sources/Js/ActionsEvents.js"></script>
     <script src="Sources/Js/Main.js"></script>
     <link rel="stylesheet" href="Sources/Css/Styles.css">
   </head>
   <body>
     <div id="splash">
-      <div class="loading"></div>
+      <div class="loading"> <!--Poner aqui todo lo del loading--> </div>
     </div>
-    <a-scene stats cursor="rayOrigin: mouse" fog="type: exponential; color: #8e8e91; density: 0.00060;" >
+    <button id="backbutton" onclick="ReturnCameraToCivicCenter()" style="display:  none; z-index: 100; position: absolute; margin-top: 2em; margin-left: 2em; background-color: transparent; border: none;">
+      <img src="Sources/Textures/back.png" height="50px" width="50px">
+  </button>
+    <a-scene vr-mode-ui="enabled=false" cursor="rayOrigin: mouse" fog="type: exponential; color: #c9c3be; density: 0.00020;" >
       <!--aqui cargamos los assets-->
       <a-assets>
         <!--aqui cargamos la textura de los edificios-->
@@ -27,10 +32,13 @@
         <img id="TexBuildingsEnv" src="Sources/Textures/BuildingsBakeEnv.jpg">
         <!--aqui cargamos la textura del cielo-->
         <img id="sky" src="Sources/Textures/SkyBox.jpg">
+        <img id="cloud" src="Sources/Textures/Cloud.png">
         <!--aqui cargamos la textura del mar-->
         <img id="Sea" src="Sources/Textures/ParallaxAssets_Sea.png">
         <!--aqui cargamos la textura del puerto-->
         <img id="Port" src="Sources/Textures/ParallaxAssets_port.png">
+        <!--aqui cargamos la textura del mural banco-->
+        <img id="TexMuralBanc" src="Sources/Textures/retablos_D_1.jpg">
         <!--aqui cargamos la textura de las montañas-->
         <img id="Mountain0" src="Sources/Textures/ParallaxAssets_Mountain_Top.png">
         <img id="Mountain1" src="Sources/Textures/ParallaxAssets_Mountain_Mid_02.png">
@@ -48,16 +56,15 @@
         <a-asset-item id="Murals3" src="/Sources/Models/Mural_1.obj"></a-asset-item>
         <a-asset-item id="Murals" src="/Sources/Models/Mural_2Env.obj"></a-asset-item>
         <a-asset-item id="Murals2" src="/Sources/Models/Mural_2.obj"></a-asset-item>
-        <!--Modelos, posiciones de las camaras-->
-        <a-asset-item id="CameraPos" src="/Sources/Models/Camera_Pos_01.obj"></a-asset-item>
-        <a-asset-item id="CameraPos1" src="/Sources/Models/Camera_Pos_02.obj"></a-asset-item>
-        <a-asset-item id="CameraPos2" src="/Sources/Models/Camera_Pos_03.obj"></a-asset-item>
-        <a-asset-item id="CameraPos3" src="/Sources/Models/Camera_Pos_04.obj"></a-asset-item>
+        <a-asset-item id="Murals_Banc" src="/Sources/Models/Murales_Banco.obj"></a-asset-item>
+        <a-asset-item id="Murals_BancEnv" src="/Sources/Models/Murales_BancoEnv.obj"></a-asset-item>
         <!--modelo del cielo-->
         <a-assets-item  id="SkyObj" src="/Sources/Models/Sky.obj">
           <!--Texturas de los murales-->
           <img id="MuralTex" src="Sources/Textures/Mural_2.png">
           <img id="MuralEnvTex" src="Sources/Textures/Mural_2_Env.png">
+          <img id="Mural1_Tex" src="Sources/Textures/Mural_1.png">
+
         <!--Texturas del reflection Probe-->
         <a-cubemap id="skyBoxEnv"> <img src="/Sources/Textures/px.png"> <img src="/Sources/Textures/nx.png"> <img src="/Sources/Textures/py.png"> <img src="/Sources/Textures/ny.png"> <img src="/Sources/Textures/pz.png"> <img src="/Sources/Textures/nz.png"> </a-cubemap>
       </a-assets>
@@ -65,11 +72,11 @@
       <!--Luces-->
       <a-entity light="type: ambient; intensity:1; color: #fff"></a-entity>
       <!--Cielo-->
-      <a-entity sky obj-model="obj: #SkyObj;" id="skybox" material="shader: flat; src:#sky; color:#fff; fog:false;" position="0 -100 0"  rotation="0 0 0"
+      <a-entity sky obj-model="obj: #SkyObj;" id="skybox" material="shader: flat; src:#sky; color:#fff; fog:false;" position="0 -360.414 0"  rotation="0 270 0"
       sound="src: #ambientsound;" scale="0.80 0.80 0.80"></a-entity>
         <!--Camaras-->
         <a-entity pivotcam id="campivot" position="0 180.0 0" rotation="0 0 0">
-            <a-entity id="camera" camera="active:  true; fov: 20; near:5.0; far:25000;" position="-6336.393 833.602 5095.655" rotation= "-10 -50 0" ><!--Posiciones iniciales 0 150 1000-->
+            <a-entity cam id="camera" camera="active:true;fov:20; near:5.0; far:25000;" look-controls="enabled:false" position="-6336.393 833.602 5095.655" rotation= "-10 -50 0" ><!--Posiciones iniciales 0 150 1000-->
             </a-entity>
         </a-entity>
         <!--Instancias de la ciudad-->
@@ -78,52 +85,69 @@
         <a-entity class="nviroment" material="src: #TexBuildingsEnv;" obj-model="obj: #nviroment2;" position="0 0 0"  rotation="0 0 0"></a-entity>
         <a-entity class="nviroment" material="src: #TexBuildingsEnv;" obj-model="obj: #nviroment3;" position="0 0 0"  rotation="0 0 0"></a-entity>
         <!--Instancias de los edificios-->
-        <a-entity class="building" material="src: #TexBuildings; roughness: 0.03; metalness: 0.15; envMap: #skyBoxEnv;" obj-model="obj: #building;" position="0 0 0"  rotation="0 0 0"></a-entity>
-        <a-entity build class="building" id="build" material="shader:SH_BuildingMask;src: #TexBuildings;cutOut:0.0;charPosition:0 0 0; fogColor:0.55 0.55 0.57;" Materials_Replace obj-model="obj: #building1;" position="0 0 0"  rotation="0 0 0"></a-entity>
-        <a-entity class="building" material="src: #TexBuildings; roughness: 0.03; metalness: 0.15; envMap: #skyBoxEnv;" obj-model="obj: #building2;" position="0 0 0"  rotation="0 0 0"></a-entity>
-        <a-entity class="building" material="src: #TexBuildings; roughness: 0.03; metalness: 0.15; envMap: #skyBoxEnv;" obj-model="obj: #building3;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity build0 id ="build0" class="building" material="shader:SH_BuildingMask;src: #TexBuildings; roughness: 1; transparent:true;cutOut:0.0;charPosition:0 0 0; fogColor:0.79 0.76 0.74; " obj-model="obj: #building; " position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity build class="building" id="build" material="shader:SH_BuildingMask;src: #TexBuildings; roughness: 1; transparent:true;cutOut:0.0;charPosition:0 0 0; fogColor:0.79 0.76 0.74;" obj-model="obj: #building1; " position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity build1 id ="build1" class="building" material="shader:SH_BuildingMask;src: #TexBuildings; roughness: 1; transparent:true;cutOut:0.0;charPosition:0 0 0; fogColor:0.79 0.76 0.74;" obj-model="obj: #building2; " position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity build2 id ="build2" class="building" material="shader:SH_BuildingMask;src: #TexBuildings; roughness: 1; transparent:true;cutOut:0.0;charPosition:0 0 0; fogColor:0.79 0.76 0.74;" obj-model="obj: #building3; " position="0 0 0"  rotation="0 0 0"></a-entity>
         <!--Instancias de las montañas-->
-        <a-entity class="mountain" geometry="primitive:plane;  height:  183;  width:  1117" material="shader:flat; src: #Mountain0; alphaTest:0.5; fog:false; transparent:true;" position="-2530.673 329.917 1182.779"  rotation="0 -51.327 0" scale="4 4 4"></a-entity>
-        <a-entity class="mountain" geometry="primitive:plane;  height:  143;  width:  967" material="shader:flat; src: #Mountain1; alphaTest:0.5; fog:false; transparent:true;" position="-1990.947 337.914 2512.274"  rotation="0.514 -51.732 -1.642" scale="4 4 4"></a-entity>
+        <a-entity class="mountain" geometry="primitive:plane;  height:  1080;  width:  4037" material="shader:flat; src: #Mountain0; alphaTest:0.5; fog:false; transparent:true;" position="-2946.389 400.895 1197.184"  rotation="0 -55.855 0" scale="1 1 1"></a-entity>
+        <a-entity class="mountain" geometry="primitive:plane;  height:  686;  width:  2891" material="shader:flat; src: #Mountain1; alphaTest:0.5; fog:false; transparent:true;" position="-2021.588 412.434 2220.539"  rotation="0.514 -58.044 -1.642" scale="1.3 1.3 1.3"></a-entity>
+        <!--Instancias de las nubes-->
+        <a-entity id="cloud0" class="cloud" geometry="primitive:plane;  height:  400.000;  width:  800.000" material="shader:SH_Cloud;src:#cloud;Alpha:0.3;transparent:true;" position="-2705.196 472.783 1836.353"  rotation="0 -45.123 0" scale="1 1 1"></a-entity>
+        <a-entity id="cloud1" class="cloud" geometry="primitive:plane;  height:  450.010;  width:  899.990" material="shader:SH_Cloud;src:#cloud;Alpha:0.3;transparent:true;" position="-1976.651 519.363 2468.929"  rotation="0 300.000 0" scale="-1 1 1"></a-entity>
+        <a-entity id="cloud2" class="cloud" geometry="primitive:plane;  height:  700;  width:  1400"  material="shader:SH_Cloud;src:#cloud;Alpha:0.3;transparent:true;" position="-2802.310 647.134 678.330"  rotation="-13.540 -40.530 -3.341" scale="1 1 1"></a-entity>
+        <a-entity id="cloud3" class="cloud" geometry="primitive:plane;  height:  700;  width:  1400"  material="shader:SH_Cloud;src:#cloud;Alpha:0.3;transparent:true;" position="-1253.115 480.885 3019.591"  rotation="13.156 -76.523 -8.192" scale="1 1 1"></a-entity>
+
         <!--Instancias del mar-->
-        <a-entity class="Sea" geometry="primitive:plane;  height:  3000;  width:  5000" 
-              material="shader:flat; src: #Sea; alphaTest:0.5; fog:false; transparent:true;" 
+        <a-entity class="Sea"  geometry="primitive:plane;  height:  3000;  width:  5000" 
+        aframe-mirror="wrapTwo:1 1;textureOne:Sources/Textures/White.jpg;
+        textureTwo:Sources/Textures/normalreplace.png;
+        color:#555;intensity:0.6;textureWidth:1024;textureHeight:1024;" 
               position="-3648.370 125 2420.391"  rotation="-90 -58 0" scale="1 1 1"></a-entity>
         <!--Instancia del puerto-->
         <a-entity class="Port" geometry="primitive:plane;  height:  500;  width:  500" 
         material="shader:flat; src: #Port; alphaTest:0.5; fog:false; transparent:true;" 
         position="-4303.763 232.814 3438.465"  rotation="-70.078 -59.154 5.626" scale="1 1 1"></a-entity>
-        <!--Instancias posiciones de la camara-->
-        <a-entity class="CameraPos" obj-model="obj: #CameraPos;" position="0 0 0"  rotation="0 0 0"></a-entity>
-        <a-entity class="CameraPos" obj-model="obj: #CameraPos1;" position="0 0 0"  rotation="0 0 0"></a-entity>
-        <a-entity class="CameraPos" obj-model="obj: #CameraPos2;" position="0 0 0"  rotation="0 0 0"></a-entity>
-        <a-entity class="CameraPos" obj-model="obj: #CameraPos3;" position="0 0 0"  rotation="0 0 0"></a-entity>
 
-        <a-entity class="PositionCameraMural0"  geometry="primitive:box;" position="38.124 9.726 220.679"  rotation="0 54.013 0" scale="1 1 1"></a-entity>
-        <a-entity id ="mural1" class="PositionCameraMural1"  geometry="primitive:box;" position="23.683 6.069 -116.776"  rotation="0 -45.852 0" scale="1 1 1"></a-entity>
-        <a-entity class="PositionCameraMural2"  geometry="primitive:box;" position="-136.166 42.778 220.739"  rotation="0 -29.651 0" scale="1 1 1"></a-entity>
-        <a-entity class="PositionCameraMural3"  geometry="primitive:box;" position="158.716 48.994 -194.739"  rotation="0 -44.441 0" scale="1 1 1"></a-entity>
+        <a-entity id= "mural0" visible="false" class="PositionCameraMural0"  geometry="primitive:box;" position="38.124 9.726 220.679"  rotation="0 54.013 0" scale="1 1 1"></a-entity>
+        <a-entity id ="mural1" visible="false" class="PositionCameraMural1"  geometry="primitive:box;" position="23.683 6.069 -116.776"  rotation="0 -45.852 0" scale="1 1 1"></a-entity>
+        <a-entity id ="mural2" visible="false" class="PositionCameraMural2"  geometry="primitive:box;" position="-136.166 42.778 220.739"  rotation="0 -29.651 0" scale="1 1 1"></a-entity>
+        <a-entity id ="mural3" visible="false" class="PositionCameraMural3"  geometry="primitive:box;" position="158.716 48.994 -194.739"  rotation="0 -44.441 0" scale="1 1 1"></a-entity>
 
         <!--Instancias de los murales-->
-        <a-entity class="building" material="src: #TexBuildings; roughness: 0.03; metalness: 0.4; envMap: #skyBoxEnv;" obj-model="obj: #Murals3;" position="0 0 0"  rotation="0 0 0"></a-entity>
+        <a-entity class="building" material="src: #Mural1_Tex; roughness: 1; metalness: 0;" obj-model="obj: #Murals3;" position="0 0 0"  rotation="0 0 0"></a-entity>
         <a-entity class="building" material="shader:flat; src:#MuralTex" obj-model="obj: #Murals2;" position="0 0 0"  rotation="0 0 0"></a-entity>
         <a-entity class="building" material="shader:flat; src:#MuralEnvTex" obj-model="obj: #Murals;" position="0 0 0"  rotation="0 0 0"></a-entity>
+
+        <!-- Mural Banco (Sergio Lo implemento perdon json) -->
+        <a-entity class="MuralCredit" material="color:#aaa;" gltf-model="/Sources/Models/Murales_Banco_Env.gltf" position="179 40.730 -111"  rotation="0 0 0" scale="5.46 5.46 5.46"></a-entity>        
+        <a-entity class="MuralCredit" material="src:#TexMuralBanc" obj-model="obj: #Murals_Banc;" position="179 40.730 -111"  rotation="0 0 0" scale="5.46 5.46 5.46"></a-entity>
 
         <!--Piso reflectivo mural de afuera-->
         <a-entity id="ReflectionToten1" geometry="primitive:  plane;  height:  40;  width:  150"
                 rotation="-90 0 0" position="96.679 1.325 186.840" scale= "1 1 1"
                 aframe-mirror="wrapTwo:1 1;textureOne:Sources/Textures/White.jpg;
                                 textureTwo:Sources/Textures/normalreplace.png;
-                                color:#555;intensity:0.8;textureWidth:1024;textureHeight:1024;" ></a-entity>
+                                color:#555;intensity:0.6;textureWidth:1024;textureHeight:1024;" ></a-entity>
+
+        <a-entity id="ReflectionToten_Banc" geometry="primitive:  plane;  height:  80;  width: 100"
+                  rotation="-90 0 0" position="177.2 42.5 -111.3" scale= "1 1 1"
+                  aframe-mirror="wrapTwo:1 1;textureOne:Sources/Textures/White.jpg;
+                                textureTwo:Sources/Textures/normalreplace.png;
+                                color:#bbb;intensity:0.1;textureWidth:1024;textureHeight:1024;" ></a-entity>
         <!--Piso-->
         <a-entity floorreflectives id="floorReflective" geometry="primitive:  plane;  height:  4000;  width:  4000"
                 rotation="-90 0 0" position="0 0 0" scale= "1 1 1"
                 aframe-mirror="wrapTwo:1 1;textureOne:Sources/Textures/FloorReplace.jpg;
                                 textureTwo:Sources/Textures/normalreplace.png;
-                                color:#999;intensity:0.2;textureWidth:1024;textureHeight:1024;
-                                fogColor:#8e8e91; charPos:800 0 500;" ></a-entity>
+                                color:#999;intensity:0.3;textureWidth:1024;textureHeight:1024;
+                                fogColor:#c9c3be; charPos:0 0 0;" ></a-entity>
         <!--Triggers-->
-        <a-entity visible="false" cubito id="cubitosergios" geometry="primitive: box; width: 1; height: 1; depth: 1" position="1.618 63.310 -205.935" scale="215.224 116.813 199.332"></a-entity>
+        <a-entity visible="false" bank id="triggerbank" geometry="primitive: box; width: 1; height: 1; depth: 1" position="4.904 63.310 -190.384" scale="65.329 123.859 95.928"></a-entity>
+        <a-entity visible="false" igss id="triggerigss" geometry="primitive: box; width: 1; height: 1; depth: 1" position="134.715 46.425 221.508" scale="215.224 96.183 199.332"></a-entity>
+        <a-entity visible="false" municipalidad id="triggerMunicipalidad" geometry="primitive: box; width: 1; height: 1; depth: 1" position="-175.102 46.646 220.569" scale="143.533 95.043 358.525"></a-entity>
+        <a-entity visible="false" credito id="triggercredito" geometry="primitive: box; width: 1; height: 1; depth: 1" position="184.400 46.646 -108.514" scale="143.533 95.043 143.000"></a-entity>
+
     </a-scene>
   </body>
 </html>

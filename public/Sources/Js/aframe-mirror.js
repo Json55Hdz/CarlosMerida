@@ -1,4 +1,7 @@
-
+let scene;
+let three_scene;
+let mirrorObj;
+let gscenereflector;
 AFRAME.registerComponent('aframe-mirror', 
 {
 	schema:{
@@ -32,20 +35,15 @@ AFRAME.registerComponent('aframe-mirror',
 	{
 		this.Camera = document.querySelector('#camera');
 
-	    var scene = this.el.sceneEl;
-	    var three_scene = scene.object3D;
-	    var mirrorObj = this.el.getObject3D('mesh');
+	    scene = this.el.sceneEl;
+	    three_scene = scene.object3D;
+	    mirrorObj = this.el.getObject3D('mesh');
 
 	    if(!mirrorObj)
 	    {
 	    	return;
 	    }
 
-	    var gscenereflector = Ashok.GroundSceneReflector(mirrorObj, scene.renderer, three_scene, this.data);
-	},
-	//jeison hizo bien su trabajo, sergio no :)
-	/*tick: function () {
-		this.charPos = {x: this.Camera.object3D.position.x,y:this.Camera.object3D.position.y,z:this.Camera.object3D.position.z};
-		console.log(this.charPos);
-    }*/
+	    gscenereflector = Ashok.GroundSceneReflector(mirrorObj, scene.renderer, three_scene, this.data);
+	}
 });
