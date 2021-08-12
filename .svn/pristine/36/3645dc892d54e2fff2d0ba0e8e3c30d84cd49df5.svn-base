@@ -1,0 +1,105 @@
+ AFRAME.registerShader('SH_BuildingMask',{
+
+	schema: {
+		src : {type:'map', is: 'uniform'},
+		cutOut : {type: 'number', is: 'uniform'},
+		metalness : {type: 'number', is: 'uniform', default: 1.0},
+		charYRot : {type:'number', is:'uniform'},
+		fogColor :{type:'vec3', is:'uniform'},
+
+		//que mierdas estoy haciendo
+		px : { type:'map', is:'uniform'},
+		nx : { type:'map', is:'uniform'},
+		py : { type:'map', is:'uniform'},
+		ny : { type:'map', is:'uniform'},
+		pz : { type:'map', is:'uniform'},
+		nz : { type:'map', is:'uniform'}
+	},
+
+vertexShader: [
+	'varying vec2 vUv;',
+	'varying vec3 vPosition;',
+	'varying vec3 vNormal;',
+
+	'void main() {',
+		'vUv = uv;',
+		'vPosition = position;',
+		'vNormal = normal;',
+
+        'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
+
+    '}'
+].join('\n'),
+fragmentShader: [
+	'varying vec2 vUv;',
+	'varying vec3 ViewReflectWorld;',
+	'varying vec3 vPosition;',
+	'varying vec3 vNormal;',
+
+	'uniform sampler2D src;',
+	'uniform float cutOut;',
+	'uniform float charYRot;',
+	'uniform vec3 fogColor;',
+	'uniform float metalness;',
+
+	//Cubemap uniforms
+	'uniform sampler2D px;',
+	'uniform sampler2D nx;',
+	'uniform sampler2D py;',
+	'uniform sampler2D ny;',
+	'uniform sampler2D pz;',
+	'uniform sampler2D nz;',
+	//end Cubemap uniforms
+
+	'void main(){',
+		'vec4 col = texture2D (src , vUv);',
+		'float sceneScale = float(0.0016);',
+		'vec3 posScaled = vPosition * vec3(sceneScale,sceneScale,sceneScale);',
+		//cubemap uv
+		'vec3 normalCl = clamp(vNormal,0.0,1.0);',
+		'vec3 normalClN = clamp((vNormal*vec3(-1.0,-1.0,-1.0)),0.0,1.0);',
+
+		'vec2 cubeUvX = vec2(posScaled.b , posScaled.g)+vec2(0.5,0.47);',
+		'vec2 cubeUvNx = cubeUvX *vec2(normalClN.r,normalClN.r);',
+		'vec2 cubeUvPx = cubeUvX *vec2(normalCl.r,normalCl.r);',
+
+		'vec2 cubeUvY = vec2(posScaled.r , posScaled.b)+vec2(0.5,0.5);',
+		'vec2 cubeUvNy = cubeUvY *vec2(normalClN.g,normalClN.g);',
+		'vec2 cubeUvPy = cubeUvY *vec2(normalCl.g,normalCl.g);',
+
+		'vec2 cubeUvZ = vec2(posScaled.r , posScaled.g)+vec2(0.5,0.47);',
+		'vec2 cubeUvNz = cubeUvZ *vec2(normalClN.b,normalClN.b);',
+		'vec2 cubeUvPz = cubeUvZ *vec2(normalCl.b,normalCl.b);',
+
+		//Cubemap Set up
+		'vec4 tPx = texture2D (px , cubeUvPx);',
+		'vec4 tNx = texture2D (nx , cubeUvNx);',
+		'vec4 tPy = texture2D (py , cubeUvPy);',
+		'vec4 tNy = texture2D (ny , cubeUvNy);',
+		'vec4 tPz = texture2D (pz , cubeUvPz);',
+		'vec4 tNz = texture2D (nz , cubeUvNz);',
+
+		//end Cubemap set up
+		'vec3 refl = (tPx.rgb * vec3(normalCl.r,normalCl.r,normalCl.r)) + (tNx.rgb * vec3(normalClN.r,normalClN.r,normalClN.r))',
+				  '+ (tPy.rgb * vec3(normalCl.g,normalCl.g,normalCl.g)) + (tNy.rgb * vec3(normalClN.g,normalClN.g,normalClN.g))',
+				  '+ (tPz.rgb * vec3(normalCl.b,normalCl.z,normalCl.b)) + (tNz.rgb * vec3(normalClN.b,normalClN.b,normalClN.b));',
+
+		'float camVecCr = charYRot/90.0;',
+		'vec3 tCamVec = vec3((abs(3.0-camVecCr)-1.0)*clamp(camVecCr,0.0,1.0),0.3,abs(camVecCr-2.0)-1.0);',
+
+		'vec3 viewVec = clamp(tCamVec.xyz,-1.0,1.0);',
+		'vec3 nlzNormal =normalize(vNormal);',
+		'float iOR =pow(1.0-dot(viewVec,nlzNormal),2.0)*metalness;',
+
+//		'vec3 colRefl = vec3(col.rgb*vec3(0.5,0.5,0.5)) + vec3(iOR*clamp(tCamVec.r,0.5,1.0),iOR*0.5,iOR*0.5);',
+
+		'vec3 colRefl = vec3(col.rgb*vec3(0.5,0.5,0.5)) + (refl*vec3(iOR,iOR,iOR)*col.rgb);',
+		'float fogD = sqrt(pow((vPosition.x - cameraPosition.x), 2.0)+pow((vPosition.y - cameraPosition.y), 2.0)+pow((vPosition.z - cameraPosition.z), 2.0));',
+		'float colFog = mix(0.6,0.0, clamp(float(fogD * 0.00015),0.0,1.0));',
+		'float cutTex = (col.a * float(1.0)) - cutOut;',
+		'gl_FragColor = vec4 (colRefl, colFog);',
+
+		'if(cutTex < 0.1) discard;',
+	'}'
+].join('\n'),
+});

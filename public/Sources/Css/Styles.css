@@ -27,3 +27,70 @@
     border-top-color: white;
     animation: spin 1s infinite linear;
   }
+
+header{
+  background: linear-gradient(180deg, rgba(240, 238, 228,0.7) 0%, rgba(240, 238, 228,0) 100%);
+  position: fixed;
+  margin: 0px;
+  height: 120px;
+  width: 100%;
+  top: 0;
+  padding: 0px;
+}
+
+#logo {
+  background-image: url("/Sources/UI/logo_oscuro.svg");
+  background-repeat: no-repeat;
+  height: 100px;
+  width: 100px;
+  display: block;
+  top: 20px;
+  left: 50px;
+  position: fixed;
+}
+
+#menu {
+  background-image: url("/Sources/UI/menu_icono.svg");
+  background-repeat: no-repeat;
+  height: 35px;
+  width: 35px;
+  display: block;
+  top: 35px;
+  right: 50px;
+  position: fixed;
+}
+footer{
+  background: linear-gradient(0deg, rgba(29, 29, 29, 0.7) 0%, rgba(29, 29, 29,0) 100%);
+  position: fixed;
+  margin: 0px;
+  height: 200px;
+  width: 100%;
+  bottom: 0px;
+  padding: 0px;
+}
+#CCText {
+  display: none;
+  background-image: url("/Sources/UI/CCText.png");
+  background-size: 60%;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: fixed;
+  height: 200px;
+  width: 100%;
+  bottom: 30px;
+}
+#backbutton {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("/Sources/UI/back.svg");  
+  background-size: 100%;
+  background-color: transparent;
+  z-index: 10;
+  display:  none; 
+  height: 50px;
+  width: 70px;
+  position: fixed;
+  top: 2em;
+  right: 2em;
+  border: none;
+}

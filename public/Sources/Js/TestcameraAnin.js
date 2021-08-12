@@ -14,7 +14,7 @@ function InitCamera () {
     var cloud3 = document.querySelector('#cloud3');
     var alphaCloud = 0.3;
     var tl = gsap.timeline({repeat:0});
-    tl.to(this.Camera.object3D.position,   {x:0, y:150, z:1000,duration:5, ease: Power2.easeInOut},0);
+    tl.to(this.Camera.object3D.position,   {x:0, y:350, z:1400,duration:5, ease: Power2.easeInOut},0);
     tl.to(this.Camera.object3D.rotation,   {x:-0.35, y:0, z:0,duration:3.5, ease: Power2.easeInOut},2);
     tl.to({}, {
         duration: 3,
@@ -31,6 +31,8 @@ function InitCamera () {
         StartCameraRot ();
     });
 }
+
+
 
 AFRAME.registerComponent('floorreflectives', {
     init: function () {
@@ -51,45 +53,13 @@ function StartCameraRot ()
 
 AFRAME.registerComponent('bank', {
     init: function () {
-        var cameraPosMural = document.querySelector('#mural1');
-        document.querySelector('#triggerbank').addEventListener('click', function (evt) {
-            if (!boolISetted){
-                boolCameraControls = true;
-                tlCameraRot.paused(true);
-                MoveCamera(cameraPosMural.object3D.position.x+30,cameraPosMural.object3D.position.y-182,cameraPosMural.object3D.position.z-20,-0.05,-1.07,0,5,0,0.5,0,true,3);
-                AnimateBuildOne (1);
-            }else{
-                boolCameraControls = false;
-                MoveCamera(0,150,1000,-0.349066,0,0,5,0,0,0,false,4);
-                setTimeout(() => 
-                { 
-                    tlCameraRot.paused(false);
-                    tlCameraRot.restart();
-                }, 5000);
-                AnimateBuildOne (0);
-            }
-        });
+        
     }
 });
 
 AFRAME.registerComponent('igss', {
     init: function () {
-        var cameraPosMural = document.querySelector('#mural0');
-        document.querySelector('#triggerigss').addEventListener('click', function (evt) {
-            if (!boolISetted){
-                boolCameraControls = true;
-                tlCameraRot.paused(true);
-                MoveCamera(cameraPosMural.object3D.position.x-210,cameraPosMural.object3D.position.y-178,cameraPosMural.object3D.position.z+40,-0.07,-1.14,0,5,0,0.5,0,true,0);
-            }else{
-                boolCameraControls = false;
-                MoveCamera(0,150,1000,-0.349066,0,0,5,0,0,0,false,4);
-                setTimeout(() => 
-                { 
-                    tlCameraRot.paused(false);
-                    tlCameraRot.restart();
-                }, 5000);
-            }
-        });
+        
     }
 });
 
@@ -113,30 +83,6 @@ AFRAME.registerComponent('igss', {
         });
     }
 });*/
-
-AFRAME.registerComponent('credito', {
-    init: function () {
-        var cameraPosMural = document.querySelector('#mural3');
-        document.querySelector('#triggercredito').addEventListener('click', function (evt) {
-            if (!boolISetted){
-                boolCameraControls = true;
-                tlCameraRot.paused(true);
-                MoveCamera(cameraPosMural.object3D.position.x+10,cameraPosMural.object3D.position.y-179,cameraPosMural.object3D.position.z+230,-0.07,-0.84,0,5,0,0.5,0,true,2);
-                AnimateBuildTwo(1);
-            }else{
-                boolCameraControls = false;
-                MoveCamera(0,150,1000,-0.349066,0,0,5,0,0,0,false,4);
-                AnimateBuildTwo(0);
-                setTimeout(() => 
-                { 
-                    tlCameraRot.paused(false);
-                    tlCameraRot.restart();
-                }, 5000);
-            }
-        });
-    }
-});
-
 function AnimateBuildOne (objetive) {
     var tarj = 0;
     var mat = document.querySelector('#build').getAttribute('material');
@@ -148,7 +94,6 @@ function AnimateBuildOne (objetive) {
                 if (tarj < 1) {
                     tarj+=(1/5)/60;
                 }
-                console.log(tarj);
               document.querySelector('#build').setAttribute('material', {cutOut: tarj});
             }
           });
@@ -160,7 +105,6 @@ function AnimateBuildOne (objetive) {
                 if (tarj > 0) {
                     tarj-=(1/5)/60;
                 }
-              console.log(tarj);
               document.querySelector('#build').setAttribute('material', {cutOut: tarj});
             }
           });
@@ -221,10 +165,15 @@ function MoveCameraAndRotate (xPos,yPos,zPos,xRot,YRot,ZRot,duration,XPivotRot,y
                 boolISetted = boolSet;
                 tl.eventCallback("onComplete", function() {
                     StartCameraRot ();
+                    ManageClassRaycast(true);
                 });
 }
 
 function CallActionById (id) {
+    if (id != 4){
+        document.querySelector('#CCText').style.display = "none";
+
+    }
     switch (id) {
         case 0:
             OnIGSSAnimationEnd();
@@ -240,6 +189,8 @@ function CallActionById (id) {
             break;
         case 4:
             OnCameraReturnToCivicCenter();
+            ManageClassRaycast(true);
+            document.querySelector('#CCText').style.display = "block";
             break;
     }
 }

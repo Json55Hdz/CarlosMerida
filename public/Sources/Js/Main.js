@@ -1,7 +1,11 @@
 let numElementsLoaded = 0;
 let totalElements = 2;
 let build;
+let build0;
+let build1;
+let build2;
 let camera;
+let rotation;
 
 AFRAME.registerComponent('sky', {
     init: function () {
@@ -13,38 +17,39 @@ AFRAME.registerComponent('sky', {
 
  AFRAME.registerComponent('build', {
     init: function () {
+        camera = document.querySelector('#campivot');
+        rotation = camera.getAttribute('rotation');
         build = document.querySelector('#build');
-        camera = document.querySelector('#camera');
     },
     tick: function () {
-      document.querySelector('#build').setAttribute('material', {charPosition: {x:camera.object3D.position.x, y: camera.object3D.position.y, z: camera.object3D.position.z}});
+      //  rotation = camera.getAttribute('rotation');
+       // calculatePosition(build,rotation);
     }
 });
 AFRAME.registerComponent('build0', {
     init: function () {
-        build = document.querySelector('#build0');
-        camera = document.querySelector('#camera');
+        build0 = document.querySelector('#build0');
     },
     tick: function () {
-      document.querySelector('#build0').setAttribute('material', {charPosition: {x:camera.object3D.position.x, y: camera.object3D.position.y, z: camera.object3D.position.z}});
+     //   calculatePosition(build0,rotation);
     }
 });
 AFRAME.registerComponent('build1', {
         init: function () {
-            build = document.querySelector('#build1');
-            camera = document.querySelector('#camera');
+            build1 = document.querySelector('#build1');
         },
         tick: function () {
-          document.querySelector('#build1').setAttribute('material', {charPosition: {x:camera.object3D.position.x, y: camera.object3D.position.y, z: camera.object3D.position.z}});
+       //     calculatePosition(build1,rotation);
+
         }
 });
 AFRAME.registerComponent('build2', {
     init: function () {
-        build = document.querySelector('#build2');
-        camera = document.querySelector('#camera');
+        build2 = document.querySelector('#build2');
     },
     tick: function () {
-      document.querySelector('#build2').setAttribute('material', {charPosition: {x:camera.object3D.position.x, y: camera.object3D.position.y, z: camera.object3D.position.z}});
+     //   calculatePosition(build2,rotation);
+////
     }
 }); 
 
@@ -58,4 +63,8 @@ function CheckElementsLoaded () {
             splash.style.display = 'none';
         }, 500);
     }
+}
+
+function calculatePosition (BuildObject, rotationCamera) {
+    BuildObject.setAttribute('material','charYRot',rotationCamera.y);
 }

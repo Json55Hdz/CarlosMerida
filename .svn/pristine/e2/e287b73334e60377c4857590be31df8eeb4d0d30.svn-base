@@ -1,0 +1,10 @@
+//estas funciones se llaman cuando un evento ocurre en el 3d
+
+
+function CameraEndFirtsTravel() {
+    console.log("Camera has been ended travel");
+}
+
+function OnBankClick () {
+    console.log("Bank building has been clicked");
+}

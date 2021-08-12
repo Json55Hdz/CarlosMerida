@@ -1,0 +1,14 @@
+//estas funciones se llaman cuando un evento ocurre en el 3d
+
+function CameraEndFirtsTravel() {
+    console.log("Camera has been ended travel");
+}
+
+function OnBankClick () {
+    console.log("Bank building has been clicked");
+}
+//proyectos@imagenvirtualweb.com
+//L -> IGSS
+//largo -> municipalidad
+// hueco -> credito hipotecario nacional
+//largo -> Banco de guatemala
