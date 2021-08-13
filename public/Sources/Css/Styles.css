@@ -94,3 +94,34 @@ footer{
   right: 2em;
   border: none;
 }
+#ContainerInfo
+{
+  pointer-events:none;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 10;
+  height: 100%;
+  width: 100%;
+}
+#imgBank{
+  display: none;
+  bottom: 20px;
+  right: 50px;
+  position: inherit;
+  width: 40%;
+}
+#imgCredit{
+  display: none;
+  bottom: 20px;
+  left: 50px;
+  position: inherit;
+  width: 40%;
+}
+#imgIgss{
+  display: none;
+  bottom: 35px;
+  right: 50px;
+  position: inherit;
+  width: 50%;
+}

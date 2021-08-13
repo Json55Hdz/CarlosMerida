@@ -76,7 +76,7 @@
         <a-assets-item  id="SkyObj" src="/Sources/Models/Sky.obj">
           <!--Texturas de los murales-->
           <img id="MuralTex" src="Sources/Textures/Mural_2.png">
-          <img id="MuralEnvTex" src="Sources/Textures/Mural_2_Env.png">
+          <img id="MuralEnvTex" src="Sources/Textures/Mural_2_Env.jpg">
           <img id="Mural1_Tex" src="Sources/Textures/Mural_1.png">
 
       </a-assets>
@@ -169,7 +169,7 @@
                 rotation="-90 0 0" position="0 0 0" scale= "1 1 1"
                 aframe-mirror="wrapTwo:1 1;textureOne:Sources/Textures/FloorReplace.jpg;
                                 textureTwo:Sources/Textures/normalReplace.jpg;
-                                color:#bbb;intensity:0.18;Refraction:30;textureWidth:1024;textureHeight:1024;
+                                color:#bbb;intensity:0.18;Refraction:100;textureWidth:1024;textureHeight:1024;
                                 fogColor:#c9c3be; charPos:0 0 0;" ></a-entity>
         <!--Triggers-->
        
@@ -179,12 +179,15 @@
         <a-entity  id="triggerMunicipalidad1" obj-model="obj:#triggerMunicipalidad_ob;" material="shader:SH_Hovers; hover:0.0; color:1 1 1;transparent:true;"></a-entity>
         <a-entity class="clickable" hovercredit id="triggerCredito1" obj-model="obj:#triggerCredito_ob;" material="shader:SH_Hovers; hover:0.0; color:1 1 1;transparent:true;"></a-entity>
     </a-scene>
+    <div id="ContainerInfo">
+      <img id="imgBank" src="Sources/UI/TextBank.png">
+      <img id="imgCredit" src="Sources/UI/TextCredit.png">
+      <img id="imgIgss" src="Sources/UI/TextIgss.png">
+    </div>
     <header>
       <div id="logo">
-
       </div>
       <div id="menu">
-
       </div>
     </header>
     <footer>
