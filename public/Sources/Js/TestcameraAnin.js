@@ -80,7 +80,7 @@ function AnimateBuildOne (objetive) {
             duration: 5,
             onUpdate() {
                 if (tarj < 1) {
-                    tarj+=(1/10)/60;
+                    tarj+=(1/5)/60;
                 }
               document.querySelector('#build').setAttribute('material', {cutOut: tarj});
             }
@@ -91,7 +91,7 @@ function AnimateBuildOne (objetive) {
             duration: 5,
             onUpdate() {
                 if (tarj > 0) {
-                    tarj-=(1/10)/60;
+                    tarj-=(1/5)/60;
                 }
               document.querySelector('#build').setAttribute('material', {cutOut: tarj});
             }
@@ -109,7 +109,7 @@ function AnimateBuildTwo (objetive) {
             duration: 5,
             onUpdate() {
                 if (tarj < 1) {
-                    tarj+=(1/10)/60;
+                    tarj+=(1/5)/60;
                 }
               document.querySelector('#build1').setAttribute('material', {cutOut: tarj});
             }
@@ -120,7 +120,7 @@ function AnimateBuildTwo (objetive) {
             duration: 5,
             onUpdate() {
                 if (tarj > 0) {
-                    tarj-=(1/10)/60;
+                    tarj-=(1/5)/60;
                 }
               document.querySelector('#build1').setAttribute('material', {cutOut: tarj});
             }
