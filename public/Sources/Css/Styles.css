@@ -71,7 +71,7 @@ footer{
 #CCText {
   display: none;
   background-image: url("/Sources/UI/CCText.png");
-  background-size: 60%;
+  background-size: 40%;
   background-repeat: no-repeat;
   background-position: center;
   position: fixed;
@@ -87,11 +87,11 @@ footer{
   background-color: transparent;
   z-index: 10;
   display:  none; 
-  height: 50px;
-  width: 70px;
+  height: 35px;
+  width: 55px;
   position: fixed;
-  top: 2em;
-  right: 2em;
+  top: 2.5em;
+  right: 3.7em;
   border: none;
 }
 #ContainerInfo
@@ -106,22 +106,22 @@ footer{
 }
 #imgBank{
   display: none;
-  bottom: 20px;
-  right: 50px;
+  bottom: 6em;
+  right: 7em;
   position: inherit;
   width: 40%;
 }
 #imgCredit{
   display: none;
-  bottom: 20px;
-  left: 50px;
+  bottom: 8em;
+  left: 7em;
   position: inherit;
   width: 40%;
 }
 #imgIgss{
   display: none;
-  bottom: 35px;
-  right: 50px;
+  bottom: 8em;
+  right: 7em;
   position: inherit;
-  width: 50%;
+  width: 43%;
 }
