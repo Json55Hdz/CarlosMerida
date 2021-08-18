@@ -13,7 +13,7 @@ AFRAME.registerComponent('hoverbank', {
             if (!boolISetted){
                 boolCameraControls = true;
                 tlCameraRot.paused(true);
-                MoveCamera(cameraPosMural.object3D.position.x+30,cameraPosMural.object3D.position.y-182,cameraPosMural.object3D.position.z-20,-0.05,-1.07,0,5,0,0.5,0,true,3);
+                MoveCamera(cameraPosMural.object3D.position.x+27,cameraPosMural.object3D.position.y-182,cameraPosMural.object3D.position.z-15,-0.05,-0.98,0,5,0,0.5,0,true,3);
                 ManageClassRaycast(false);
                 AnimateBuildOne (1);
             }else{
