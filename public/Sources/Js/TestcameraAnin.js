@@ -146,6 +146,12 @@ function MoveCamera (xPos,yPos,zPos,xRot,YRot,ZRot,duration,XPivotRot,yPivotRot,
 function MoveCameraAndRotate (xPos,yPos,zPos,xRot,YRot,ZRot,duration,XPivotRot,yPivotRot,zPivotRot,boolSet,idBuilding){
     cameraPos = document.querySelector('#camera');
     cameraPivot = document.querySelector('#campivot');
+    setTimeout(() => 
+                {
+                    document.querySelector('#paredCredit').setAttribute('visible',true);
+                    document.querySelector('#muralCreditVisible').setAttribute('visible',true);
+                }, 2000);
+    
     var tl = gsap.timeline({repeat:0});
                 tl.to(cameraPos.object3D.position,{x:xPos, y:yPos, z:zPos,duration:duration, ease: Power2.easeInOut},0);
                 tl.to(cameraPos.object3D.rotation,{x:xRot, y:YRot, z:ZRot, duration:duration,ease: Power2.easeInOut},0);
@@ -160,7 +166,6 @@ function MoveCameraAndRotate (xPos,yPos,zPos,xRot,YRot,ZRot,duration,XPivotRot,y
 function CallActionById (id) {
     if (id != 4){
         document.querySelector('#CCText').style.display = "none";
-
     }
     switch (id) {
         case 0:

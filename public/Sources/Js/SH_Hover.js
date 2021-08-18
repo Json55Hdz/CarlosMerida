@@ -20,7 +20,7 @@
 
 	'void main(){',
 		'float str = clamp((1.0 - vUv.g - 1.0 + hover), 0.0, 1.0);',
-		'gl_FragColor = vec4(color,str);',
+		'gl_FragColor = vec4(color,str*0.6);',
 		'if(str < 0.01) discard;',
 	'}'
 	].join('\n'),

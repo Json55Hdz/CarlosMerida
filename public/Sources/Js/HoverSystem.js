@@ -41,6 +41,9 @@ AFRAME.registerComponent('hoverigss', {
           //Click Actions
         var cameraPosMural = document.querySelector('#mural0');
         this.el.addEventListener('click', function (evt) {
+            document.querySelector('#paredCredit').setAttribute('visible',false);
+            document.querySelector('#muralCreditVisible').setAttribute('visible',false);
+
             if (!boolISetted){
                 boolCameraControls = true;
                 tlCameraRot.paused(true);

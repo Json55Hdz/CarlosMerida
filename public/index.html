@@ -149,8 +149,8 @@
         <a-entity class="building" material="shader:flat; src:#MuralEnvTex" obj-model="obj: #Murals;" position="0 0 0"  rotation="0 0 0"></a-entity>
 
         <!-- Mural Banco (Sergio Lo implemento perdon json) -->
-        <a-entity class="MuralCredit" material="shader: flat;src:#TextMuralBankEnv;" obj-model="obj: #muralBanckNviroment" position="179 40.730 -111"  rotation="0 0 0" scale="5.46 5.46 5.46"></a-entity>        
-        <a-entity class="MuralCredit" material="src:#TexMuralBanc" obj-model="obj: #Murals_Banc;" position="179 40.730 -111"  rotation="0 0 0" scale="5.46 5.46 5.46"></a-entity>
+        <a-entity id ="paredCredit" class="MuralCredit" material="shader: flat;src:#TextMuralBankEnv;" obj-model="obj: #muralBanckNviroment" position="179 40.730 -111"  rotation="0 0 0" scale="5.46 5.46 5.46"></a-entity>        
+        <a-entity id ="muralCreditVisible" class="MuralCredit" material="src:#TexMuralBanc" obj-model="obj: #Murals_Banc;" position="179 40.730 -111"  rotation="0 0 0" scale="5.46 5.46 5.46"></a-entity>
 
         <!--Piso reflectivo mural de afuera-->
         <a-entity id="ReflectionToten1" geometry="primitive:  plane;  height:  40;  width:  150"
