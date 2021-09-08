@@ -125,3 +125,64 @@ footer{
   position: inherit;
   width: 43%;
 }
+
+#izqlogo{
+  width: 30%;
+  height: 100%;
+}
+#logoanim{
+  width: 40%;
+  height: 100%;
+  align-items:center;
+  display: flex;  
+}
+#derlogo{
+  width: 30%;
+  height: 100%;
+}
+#ContainerAnim img {
+  vertical-align:middle;
+}
+
+#logoanim img {
+  vertical-align:middle;
+}
+
+#ContainerAnim{
+  height: 100%;
+  display: flex;
+  position: inherit;
+}
+
+#Initlogo {
+  display: none;
+  pointer-events:none;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 10;
+  height: 100%;
+  width: 100%;
+}
+
+#Initlogomovile {
+  display: none;
+  pointer-events:none;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 10;
+  height: 100%;
+  width: 100%;
+}
+
+
+#ContainerAnimMovil{
+  height: 100%;
+  display: flex;
+  position: inherit;
+  flex-direction: column;
+  align-content:center;
+  justify-content:center;
+  
+}

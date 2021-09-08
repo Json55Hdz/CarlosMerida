@@ -71,8 +71,15 @@ function CheckElementsLoaded () {
         setTimeout(() => 
         { 
             var splash = document.querySelector('#splash');
+            var logo = document.querySelector('#Initlogo');
+            var logoMovil = document.querySelector('#Initlogomovile');
             InitCamera();
             splash.style.display = 'none';
+            if (isMobile) {
+                logoMovil.style.display = 'block';
+            }else{
+                logo.style.display = 'block';
+            }
         }, 500);
     }
 }
@@ -101,3 +108,4 @@ function SetUIForCivicCenter() {
 function EnableUiById(id) {
     document.getElementById(id).style.display = "block";
 }
+

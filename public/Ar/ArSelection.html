@@ -1,0 +1,61 @@
+<html>
+<head>
+  <title>Rotation</title>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js"></script>
+    <script src="https://unpkg.com/aframe-extras@3.3.0/dist/aframe-extras.min.js"></script>
+    <script src="../Sources/Js/SH_Previs.js"></script>
+    <script src="https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+  <script  src="../Sources/Js/look-controls.js"></script>
+
+  <script  src="../Sources/Js/CloseTab.js"></script>
+  <script  src="../Sources/Js/FacesManager.js"></script>
+  <link rel="stylesheet" href="Styles.css">
+</head>
+<body>
+  <a-scene vr-mode-ui="enabled: false" cursor="rayOrigin: mouse" raycaster="far: 5000; interval: 1;objects: .clickable; ">
+    <a-assets>
+
+      <a-asset-item id="strucBank" src="../Sources/Models/ArModels/CreditoHipotecario_Estruct.obj"></a-asset-item>
+      <a-asset-item id="floorBank" src="../Sources/Models/ArModels/CreditoHipotecario_Floor.obj"></a-asset-item>
+      <img id="MuralTex" src="../Sources/Models/ArModels/CreditoHipotecario_Retablos.png">
+      <a-asset-item id="MuralBank" src="../Sources/Models/ArModels/CreditoHipotecario_Retablos.obj"></a-asset-item>
+    </a-assets>
+
+    <a-entity rotate class="clickable" id="rotate" drag-rotate-component material="shader:flat; flatShading:true; src:#MuralTex; side:double;" obj-model="obj:#MuralBank" position="0 0 -45" scale="0.15 0.15 0.15"  rotation="0 0 0">
+      <a-entity face0 id="face0" class="clickable"  position="-0.31 1.62 7.37" scale="17.44 2.81 0.14"></a-entity>
+
+    <a-entity obj-model="obj:#floorBank" material="shader:flat; flatShading:true; color:#eae1da; side:double;"></a-entity>
+    <a-entity obj-model="obj:#strucBank" material="shader:SH_Previs;color:1.0 0.93 0.88;transpFront:0.5;transparent:true;side:double;depthWrite:true; hover:2.0;colorHover:0.0 1.0 1.0;"></a-entity>
+    </a-entity>
+    <!--triggers-->
+
+    <a-entity face class="Noclickable"  position="0 0 16" scale="30 5 1"></a-entity>
+    <a-entity face class="Noclickable"   position="-15 0 0" scale="1 5 30"></a-entity>
+    <a-entity face class="Noclickable"   position="0 0 -17" scale="30 5 1"></a-entity>
+    <!-- <a-box rotate id="rotate" color="green" drag-rotate-component position="0 0 -3"></a-box> -->
+    <a-entity Camera="fov:10; near:0.05;" position="0 8 0" rotation="-10 0 0"></a-entity>
+  </a-scene>
+  
+  <div> <img id="backgroundImage" src="../Sources/UI/Bg.png"> </div>
+  <div id="containerUI">
+    <div  id="Instructions">
+    </div>
+  <div id="MuralSelected"></div>
+    <div  id="clickAr" onclick="Close()">
+    </div>
+  </div>
+  <header>
+    <div id="logo">
+    </div>
+    <div id="MuralName">
+      <h5>BANCO DE CRÉDITO<br>HIPOTECARIO<br>NACIONAL</h1>
+    </div>
+    <div id="backbutton" onclick="Close()">
+    </div>
+  </header>
+  </button>
+  
+</body>
+</html>

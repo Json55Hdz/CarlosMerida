@@ -1,0 +1,110 @@
+body{
+    background-color: #f3f1e3;
+}
+
+#backgroundImage{
+    top: 0%;
+    display: flex;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background-image: url("../Sources/UI/Bg.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+#backbutton {
+    background-image: url("../Sources/UI/back.svg");
+    background-repeat: no-repeat;
+    height: 35px;
+    width: 35px;
+    display: none;
+    top: 35px;
+    right: 5%;
+    position: fixed;
+}
+  header{
+    display: flex;
+    background: linear-gradient(180deg, rgba(240, 238, 228,0.7) 0%, rgba(240, 238, 228,0) 100%);
+    position: fixed;
+    margin: 0px;
+    height: 120px;
+    width: 100%;
+    top: 0;
+    padding: 0px;
+    z-index: 10;
+}
+
+#logo {
+    background-image: url("../Sources/UI/logo_oscuro.svg");
+    background-repeat: no-repeat;
+    height: 80px;
+    width: 50px;
+    display: block;
+    top: 20px;
+    left: 30px;
+    position: fixed;
+  }
+
+#MuralName {
+    border-left: 1px solid;
+    border-color: rgb(76, 75, 72);
+    background-position: left;
+    align-items: center;
+    background-repeat: no-repeat;
+    height: 80px;
+    width: 160px;
+    display: block;
+    top: 20px;
+    left: 90px;
+    position: fixed;
+}
+#MuralName h5{
+    margin-top: 10%;
+    margin-left: 10%;
+    color: rgb(76, 75, 72);
+}
+
+#containerUI{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    display: flex;
+}
+
+#Instructions {
+    bottom: 15%;
+    background-image: url("../Sources/UI/rotar.png");
+    background-size:60%;
+    position: fixed;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 200px;
+    width:100%;
+}
+
+#MuralSelected {
+    display: none;
+    top: 0;
+    position:fixed;
+    background-image: url("../Sources/UI/rotar.png");
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+#clickAr {
+    display: none;
+    bottom: 15%;
+    background-image: url("../Sources/UI/AR.png");
+    background-size:60%;
+    position: fixed;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 200px;
+    width:100%;
+}

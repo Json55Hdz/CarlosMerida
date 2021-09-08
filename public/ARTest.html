@@ -1,0 +1,295 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no'>
+    <meta name='mobile-web-app-capable' content='yes'>
+    <meta name='apple-mobile-web-app-capable' content='yes'>
+    <link rel='icon' type='image/png' sizes='32x32' href='favicon-32x32.png'>
+    <link rel='icon' type='image/png' sizes='96x96' href='favicon-96x96.png'>
+    <link rel='stylesheet' href='css/common.css'>
+    <title>AR Model</title>
+  </head>
+  <body>
+    <header>
+      <details open>
+        <summary>AR Model</summary>
+        <p>
+          Seleccione una pared para ubicar el modelo.
+          <a class="back" href="./">Atras</a>
+        </p>
+      </details>
+    </header>
+	<div id="overdiv">
+	   <button id="btna" type="button" onclick="scaleMural(.5);" style="
+    height: 100px;" >Aumentar!</button>
+	 <button id="btnb" type="button" onclick="scaleMural(-.5);" style="
+    height: 100px;" >Disminuir!</button>
+	 <button id="btnb" type="button" onclick="ReUbicar();" style="
+    height: 100px;" >re ubicar!</button>
+	</div>
+	<script>
+	var Mural2;
+	var ARScan=true;
+	
+	var MaxScale=2;
+	var MinScale=0.5;
+	
+	
+	function ReUbicar()
+	{
+	   ARScan=true;
+	}
+	
+    function scaleMural(value)
+	{
+	   //console.log("aaaaaaaaaaaafffffffffffff");
+	   //https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web
+	   //scale
+	   var curr=Mural2.children[0].matrix[0];
+	   
+	   console.log(curr);
+	   
+	   if( value > 0 && curr < MaxScale)
+	   {
+			Mural2.children[0].matrix[0]=Mural2.children[0].matrix[0]+value;
+			Mural2.children[0].matrix[5]=Mural2.children[0].matrix[5]+value;
+			Mural2.children[0].matrix[10]=Mural2.children[0].matrix[10]+value;
+			
+	   }
+	   else if(value < 0 && curr > MinScale)
+	   {
+	       	Mural2.children[0].matrix[0]=Mural2.children[0].matrix[0]+value;
+			Mural2.children[0].matrix[5]=Mural2.children[0].matrix[5]+value;
+		    Mural2.children[0].matrix[10]=Mural2.children[0].matrix[10]+value;
+	   }
+	   
+		
+	}
+	</script>
+    <script type="module">
+      import {WebXRButton} from './js/util/webxr-button.js';
+      import {Scene} from './js/render/scenes/scene.js';
+      import {Renderer, createWebGLContext} from './js/render/core/renderer.js';
+      import {Node} from './js/render/core/node.js';
+      import {Gltf2Node} from './js/render/nodes/gltf2.js';
+      import {DropShadowNode} from './js/render/nodes/drop-shadow.js';
+      import {vec3} from './js/render/math/gl-matrix.js';
+      import {Ray} from './js/render/math/ray.js';
+
+      // XR globals.
+      let xrButton = null;
+      let xrRefSpace = null;
+      let xrViewerSpace = null;
+      let xrHitTestSource = null;
+	  let Mural = null;
+
+      // WebGL scene globals.
+      let gl = null;
+      let renderer = null;
+      let scene = new Scene();
+      scene.enableStats(false);
+
+      let arObject = new Node();
+      arObject.visible = false;
+      scene.addNode(arObject);
+
+      let flower = new Gltf2Node({url: 'Sources/Models/muralArWall2.gltf'});
+      arObject.addNode(flower);
+
+     // let reticle = new Gltf2Node({url: 'media/gltf/reticle/reticle.gltf'});
+	  let reticle = new Gltf2Node({url: 'Sources/Models/muralArWall2.gltf'});
+      reticle.visible = false;
+      scene.addNode(reticle);
+
+      // Having a really simple drop shadow underneath an object helps ground
+      // it in the world without adding much complexity.
+      let shadow = new DropShadowNode();
+      vec3.set(shadow.scale, 0.15, 0.15, 0.15);
+      arObject.addNode(shadow);
+
+      const MAX_FLOWERS = 1;
+      let flowers = [];
+
+      // Ensure the background is transparent for AR.
+      scene.clear = false;
+
+      function initXR() {
+        xrButton = new WebXRButton({
+          onRequestSession: onRequestSession,
+          onEndSession: onEndSession,
+          textEnterXRTitle: "START AR",
+          textXRNotFoundTitle: "AR NOT FOUND",
+          textExitXRTitle: "EXIT  AR",
+        });
+        document.querySelector('header').appendChild(xrButton.domElement);
+
+        if (navigator.xr) {
+          navigator.xr.isSessionSupported('immersive-ar')
+                      .then((supported) => {
+            xrButton.enabled = supported;
+          });
+        }
+      }
+
+      function onRequestSession() {
+        return navigator.xr.requestSession('immersive-ar', {
+			requiredFeatures: ['local', 'hit-test'],
+			optionalFeatures: ["dom-overlay"],
+			  domOverlay: {
+				root: document.getElementById("overdiv")
+			  }
+		})
+                           .then((session) => {
+          xrButton.setSession(session);
+          onSessionStarted(session);
+        });
+      }
+
+      function onSessionStarted(session) {
+        session.addEventListener('end', onSessionEnded);
+        session.addEventListener('select', onSelect);
+		session.addEventListener('squeeze ', onSqueeze);
+
+        if (!gl) {
+          gl = createWebGLContext({
+            xrCompatible: true
+          });
+
+          renderer = new Renderer(gl);
+
+          scene.setRenderer(renderer);
+        }
+
+        session.updateRenderState({ baseLayer: new XRWebGLLayer(session, gl) });
+
+        // In this sample we want to cast a ray straight out from the viewer's
+        // position and render a reticle where it intersects with a real world
+        // surface. To do this we first get the viewer space, then create a
+        // hitTestSource that tracks it.
+        session.requestReferenceSpace('viewer').then((refSpace) => {
+          xrViewerSpace = refSpace;
+          session.requestHitTestSource({ space: xrViewerSpace }).then((hitTestSource) => {
+            xrHitTestSource = hitTestSource;
+          });
+        });
+
+        session.requestReferenceSpace('local').then((refSpace) => {
+          xrRefSpace = refSpace;
+
+          session.requestAnimationFrame(onXRFrame);
+        });
+      }
+
+      function onEndSession(session) {
+        xrHitTestSource.cancel();
+        xrHitTestSource = null;
+        session.end();
+      }
+
+      function onSessionEnded(event) {
+        xrButton.setSession(null);
+      }
+
+      // Adds a new object to the scene at the
+      // specified transform.
+      function addARObjectAt(matrix) {
+        Mural = arObject.clone();
+        Mural.visible = true;
+       
+	   console.log(matrix);
+	   
+	   
+	   Mural.matrix=matrix;
+
+
+	   Mural.matrix[1] = -1;
+       Mural.matrix[5] = 0;
+	   
+	   Mural.matrix[6] = -1;
+	   Mural.matrix[9] = 0;
+
+     /*Mural.matrix[4] = 0;
+	   Mural.matrix[0]=0;
+	   Mural.matrix[2]=0;*/
+	   
+	   
+	   
+		if(Mural.matrix[12]<-0.5)  //x negativo
+		{
+		  Mural.matrix[8]=Mural.matrix[8]*-1;
+		}
+
+
+	   scene.addNode(Mural);
+		Mural2=Mural;
+        flowers.push(Mural);
+		ARScan=false;
+		//matrix = Mural.yRotate(matrix,45);
+		
+        // For performance reasons if we add too many objects start
+        // removing the oldest ones to keep the scene complexity
+        // from growing too much.
+        if (flowers.length > MAX_FLOWERS) {
+          let oldFlower = flowers.shift();
+          scene.removeNode(oldFlower);
+        }
+      }
+
+      let rayOrigin = vec3.create();
+      let rayDirection = vec3.create();
+      function onSelect(event) {
+        if (reticle.visible) {
+          // The reticle should already be positioned at the latest hit point, 
+          // so we can just use it's matrix to save an unnecessary call to 
+          // event.frame.getHitTestResults.
+		  
+          addARObjectAt(reticle.matrix);
+        }
+      }
+	  
+	   function onSqueeze(event) {
+          scaleMural(.5);
+      }
+
+      // Called every time a XRSession requests that a new frame be drawn.
+      function onXRFrame(t, frame) {
+        let session = frame.session;
+        let pose = frame.getViewerPose(xrRefSpace);
+
+        reticle.visible = false;
+		if(ARScan)
+		{
+			 // If we have a hit test source, get its results for the frame
+			// and use the pose to display a reticle in the scene.
+			if (xrHitTestSource && pose) {
+			  let hitTestResults = frame.getHitTestResults(xrHitTestSource);
+			  if (hitTestResults.length > 0) {
+				let pose = hitTestResults[0].getPose(xrRefSpace);
+				reticle.visible = true;
+				reticle.matrix = pose.transform.matrix;
+				//reticle.orientation=pose.orientation;
+				//reticle.position=pose.position;
+				//console.log(reticle.matrix);
+			  }
+			}
+		
+		}
+
+        scene.startFrame();
+
+        session.requestAnimationFrame(onXRFrame);
+
+        scene.drawXRFrame(frame, pose);
+
+        scene.endFrame();
+      }
+
+      // Start the XR application.
+      initXR();
+	  
+	 // document.addEventListener('touchend', onDocumentTouchEnd, false);
+
+    </script>
+  </body>
+</html>
